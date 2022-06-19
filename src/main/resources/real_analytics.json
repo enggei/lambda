@@ -1,0 +1,18 @@
+{
+  "packages": [
+    {
+      "name": "com.realgroup.analytics.domain",
+      "entities": [
+        {
+          "name": "Person",
+          "fields": [
+            {"name": "name", "type": "String"},
+            {"name": "role", "type": "String"}
+          ],
+          "methods": [
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,108 @@
+delimiters "~","~"
+
+eom() ::= "}"
+
+gt() ::= ">"
+
+compilationUnit(packageName, imports, members) ::= <<
+package ~packageName~;
+
+~if(imports)~
+~imports:{it|import ~it~;};separator="\n"~
+~endif~
+
+~members:{it|~it~};separator="\n\n"~
+>>
+
+importDeclaration(name, isStatic, isAsterisk) ::= <<~if(isStatic)~static ~endif~~name~~if(isAsterisk)~.*~endif~>>
+
+enumDeclaration(annotations, scope, name, values) ::= <<
+~if(annotations)~~annotations:{it|~it~};separator="\n"~
+~endif~
+~if(scope)~~scope~ ~endif~enum ~name~ {
+    ~values:{it|~it~};separator=",\n"~
+}
+>>
+
+interfaceDeclaration(annotations, scope, name, typeParameters, members) ::= <<
+~if(annotations)~~annotations:{it|~it~};separator="\n"~
+~endif~
+~if(scope)~~scope~ ~endif~interface ~name~~if(typeParameters)~<~typeParameters:{it|~it~};separator=", "~> ~endif~ {
+    ~members:{it|~it~};separator=",\n"~
+}
+>>
+
+classDeclaration(annotations, scope, name, typeParameters, extending, implement, fields, constructors, methods, nested) ::= <<
+~if(annotations)~~annotations:{it|~it~};separator="\n"~
+~endif~
+~if(scope)~~scope~ ~endif~class ~name~~if(typeParameters)~<~typeParameters:{it|~it~};separator=", "~> ~endif~~if(extending)~ extends ~extending~~endif~~if(implement)~ implements ~implement:{it|~it~};separator=", "~~endif~ {
+~if(fields)~
+
+	~fields:{it|~it~};separator="\n"~
+~endif~
+~if(constructors)~
+
+	~constructors:{it|~it~};separator="\n\n"~
+~endif~
+~if(methods)~
+
+	~methods:{it|~it~};separator="\n\n"~
+~endif~
+~if(nested)~
+
+	~nested:{it|~it~};separator="\n\n"~
+~endif~
+}
+>>
+
+classField(scope, name, type, init) ::= <<
+~if(scope)~~scope~ ~endif~~type~ ~name~~if(init)~ = ~init~~endif~;
+>>
+
+classConstructor(scope, name, parameters, throws, statements) ::= <<
+~if(scope)~~scope~ ~endif~~name~(~parameters:{it|~it~};separator=", "~)~if(throws)~ throws ~throws:{it|~it~};separator=", "~~endif~ {
+    ~statements:{it|~it~};separator="\n"~
+}
+>>
+
+classMethod(scope, name, type, annotations, parameters, throws, statements) ::= <<
+~if(annotations)~~annotations:{it|~it~};separator="\n"~
+~endif~
+~if(scope)~~scope~ ~endif~~if(type)~~type~ ~else~void ~endif~~name~(~parameters:{it|~it~};separator=", "~)~if(throws)~ throws ~throws:{it|~it~};separator=", "~~endif~ {
+    ~statements:{it|~it~};separator="\n"~
+}
+>>
+
+interfaceMethod(scope, name, type, annotations, parameters, throws) ::= <<
+~if(annotations)~~annotations:{it|~it~};separator="\n"~
+~endif~
+~if(scope)~~scope~ ~endif~~if(type)~~type~ ~else~void ~endif~~name~(~parameters:{it|~it~};separator=", "~)~if(throws)~ throws ~throws:{it|~it~};separator=", "~~endif~;
+>>
+
+annotation(name) ::= <<@~name~>>
+
+collectionOf(type) ::= <<java.util.Collection<~type~~gt()~ >>
+optional(type) ::= <<java.util.Optional<~type~~gt()~ >>
+optionalOf(value) ::= <<java.util.Optional.of(~value~) >>
+
+parameter(type, name) ::= <<~type~ ~name~>>
+
+block(statements) ::= <<~statements:{it|~it~};separator="\n"~>>
+
+returnExpression(expression) ::= <<return ~expression~;>>
+
+lambda(arguments, statements) ::= << (~arguments:{it|~it~};separator=", "~) -> { ~statements:{it|~it~};separator="\n"~}>>
+
+variable(scope, name, type, init) ::= <<
+~if(scope)~~scope~ ~endif~~type~ ~name~~if(init)~ = ~init~~endif~;
+>>
+
+statement(expression) ::= <<~expression~;>>
+
+methodCall(scope, name, arguments) ::= <<
+~if(scope)~~scope~.~endif~~name~(~arguments:{it|~it~};separator=", "~)
+>>
+
+type(name, types) ::= <<~name~~if(types)~<~types:{it|~it~};separator=","~>~endif~>>
+
+newInstance(type, arguments) ::= <<new ~type~(~arguments:{it|~it~};separator=", "~)>>

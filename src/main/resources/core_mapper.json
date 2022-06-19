@@ -1,0 +1,185 @@
+{
+  "templateName": "classDeclaration",
+  "ONE": [
+    {
+      "template": "name",
+      "model": "name"
+    },
+    {
+      "template": "extending",
+      "model": "extends"
+    },
+    {
+      "template": "scope",
+      "model": "scope"
+    }
+  ],
+  "MANY": [
+    {
+      "template": "annotations",
+      "model": "annotations",
+      "mapper": {
+        "templateName": "annotation",
+        "ONE": [
+          {
+            "template": "name",
+            "model": "name"
+          }
+        ],
+        "MANY": []
+      }
+    },
+    {
+      "template": "typeParameters",
+      "model": "typeParameters"
+    },
+    {
+      "template": "fields",
+      "model": "fields",
+      "mapper": {
+        "templateName": "classField",
+        "ONE": [
+          {
+            "template": "name",
+            "model": "name"
+          },
+          {
+            "template": "scope",
+            "model": "scope"
+          },
+          {
+            "template": "type",
+            "model": "type"
+          },
+          {
+            "template": "init",
+            "model": "init"
+          }
+        ],
+        "MANY": []
+      }
+    },
+    {
+      "template": "methods",
+      "model": "methods",
+      "mapper": {
+        "templateName": "classMethod",
+        "ONE": [
+          {
+            "template": "name",
+            "model": "name"
+          },
+          {
+            "template": "type",
+            "model": "type"
+          },
+          {
+            "template": "scope",
+            "model": "scope"
+          }
+        ],
+        "MANY": [
+          {
+            "template": "statements",
+            "model": "statements"
+          },
+          {
+            "template": "annotations",
+            "model": "annotations",
+            "mapper": {
+              "templateName": "annotation",
+              "ONE": [
+                {
+                  "template": "name",
+                  "model": "name"
+                }
+              ],
+              "MANY": []
+            }
+          },
+          {
+            "template": "parameters",
+            "model": "parameters",
+            "mapper": {
+              "templateName": "parameter",
+              "ONE": [
+                {
+                  "template": "name",
+                  "model": "name"
+                },
+                {
+                  "template": "type",
+                  "model": "type"
+                }
+              ],
+              "MANY": []
+            }
+          },
+          {
+            "template": "throws",
+            "model": "throws"
+          }
+        ]
+      }
+    },
+    {
+      "template": "constructors",
+      "model": "constructors",
+      "mapper": {
+        "templateName": "classConstructor",
+        "ONE": [
+          {
+            "template": "name",
+            "model": "name"
+          },
+          {
+            "template": "scope",
+            "model": "scope"
+          }
+        ],
+        "MANY": [
+          {
+            "template": "statements",
+            "model": "statements"
+          },
+          {
+            "template": "annotations",
+            "model": "annotations",
+            "mapper": {
+              "templateName": "annotation",
+              "ONE": [
+                {
+                  "template": "name",
+                  "model": "name"
+                }
+              ],
+              "MANY": []
+            }
+          },
+          {
+            "template": "parameters",
+            "model": "parameters",
+            "mapper": {
+              "templateName": "parameter",
+              "ONE": [
+                {
+                  "template": "name",
+                  "model": "name"
+                },
+                {
+                  "template": "type",
+                  "model": "type"
+                }
+              ],
+              "MANY": []
+            }
+          },
+          {
+            "template": "throws",
+            "model": "throws"
+          }
+        ]
+      }
+    }
+  ]
+}

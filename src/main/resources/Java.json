@@ -1,0 +1,417 @@
+{
+  "name": "Java",
+  "templates": [
+    {
+      "name": "enumDeclaration",
+      "content": "~if(annotations)~~annotations:{it|~it~};separator=\"\\n\"~\n~endif~\n~if(scope)~~scope~ ~endif~enum ~name~ {\n    ~values:{it|~it~};separator=\",\\n\"~\n}",
+      "parameters": [
+        {
+          "name": "annotations",
+          "qty": "MANY"
+        },
+        {
+          "name": "scope",
+          "qty": "ONE"
+        },
+        {
+          "name": "name",
+          "qty": "ONE"
+        },
+        {
+          "name": "values",
+          "qty": "MANY"
+        }
+      ]
+    },
+    {
+      "name": "classConstructor",
+      "content": "~if(scope)~~scope~ ~endif~~name~(~parameters:{it|~it~};separator=\", \"~) {\n    ~statements:{it|~it~};separator=\"\\n\"~\n}",
+      "parameters": [
+        {
+          "name": "scope",
+          "qty": "ONE"
+        },
+        {
+          "name": "name",
+          "qty": "ONE"
+        },
+        {
+          "name": "parameters",
+          "qty": "MANY"
+        },
+        {
+          "name": "statements",
+          "qty": "MANY"
+        }
+      ]
+    },
+    {
+      "name": "statement",
+      "content": "~expression~;",
+      "parameters": [
+        {
+          "name": "expression",
+          "qty": "ONE"
+        }
+      ]
+    },
+    {
+      "name": "methodCall",
+      "content": "~if(scope)~~scope~.~endif~~name~(~arguments:{it|~it~};separator=\", \"~)",
+      "parameters": [
+        {
+          "name": "scope",
+          "qty": "ONE"
+        },
+        {
+          "name": "name",
+          "qty": "ONE"
+        },
+        {
+          "name": "arguments",
+          "qty": "MANY"
+        }
+      ]
+    },
+    {
+      "name": "classField",
+      "content": "~if(scope)~~scope~ ~endif~~type~ ~name~~if(init)~ = ~init~~endif~;",
+      "parameters": [
+        {
+          "name": "scope",
+          "qty": "ONE"
+        },
+        {
+          "name": "name",
+          "qty": "ONE"
+        },
+        {
+          "name": "type",
+          "qty": "ONE"
+        },
+        {
+          "name": "init",
+          "qty": "ONE"
+        }
+      ]
+    },
+    {
+      "name": "parameter",
+      "content": "~type~ ~name~",
+      "parameters": [
+        {
+          "name": "type",
+          "qty": "ONE"
+        },
+        {
+          "name": "name",
+          "qty": "ONE"
+        }
+      ]
+    },
+    {
+      "name": "type",
+      "content": "~name~~if(types)~<~types:{it|~it~};separator=\",\"~>~endif~",
+      "parameters": [
+        {
+          "name": "name",
+          "qty": "ONE"
+        },
+        {
+          "name": "types",
+          "qty": "MANY"
+        }
+      ]
+    },
+    {
+      "name": "optionalOf",
+      "content": "java.util.Optional.of(~value~) ",
+      "parameters": [
+        {
+          "name": "value",
+          "qty": "ONE"
+        }
+      ]
+    },
+    {
+      "name": "lambda",
+      "content": " (~arguments:{it|~it~};separator=\", \"~) -> { ~statements:{it|~it~};separator=\"\\n\"~}",
+      "parameters": [
+        {
+          "name": "arguments",
+          "qty": "MANY"
+        },
+        {
+          "name": "statements",
+          "qty": "MANY"
+        }
+      ]
+    },
+    {
+      "name": "variable",
+      "content": "~if(scope)~~scope~ ~endif~~type~ ~name~~if(init)~ = ~init~~endif~;",
+      "parameters": [
+        {
+          "name": "scope",
+          "qty": "ONE"
+        },
+        {
+          "name": "name",
+          "qty": "ONE"
+        },
+        {
+          "name": "type",
+          "qty": "ONE"
+        },
+        {
+          "name": "init",
+          "qty": "ONE"
+        }
+      ]
+    },
+    {
+      "name": "compilationUnit",
+      "content": "package ~packageName~;\n\n~if(imports)~\n~imports:{it|import ~it~;};separator=\"\\n\"~\n~endif~\n\n~members:{it|~it~};separator=\"\\n\\n\"~",
+      "parameters": [
+        {
+          "name": "packageName",
+          "qty": "ONE"
+        },
+        {
+          "name": "imports",
+          "qty": "MANY"
+        },
+        {
+          "name": "members",
+          "qty": "MANY"
+        }
+      ]
+    },
+    {
+      "name": "interfaceDeclaration",
+      "content": "~if(annotations)~~annotations:{it|~it~};separator=\"\\n\"~\n~endif~\n~if(scope)~~scope~ ~endif~interface ~name~~if(typeParameters)~<~typeParameters:{it|~it~};separator=\", \"~> ~endif~ {\n    ~members:{it|~it~};separator=\",\\n\"~\n}",
+      "parameters": [
+        {
+          "name": "annotations",
+          "qty": "MANY"
+        },
+        {
+          "name": "scope",
+          "qty": "ONE"
+        },
+        {
+          "name": "name",
+          "qty": "ONE"
+        },
+        {
+          "name": "typeParameters",
+          "qty": "MANY"
+        },
+        {
+          "name": "members",
+          "qty": "MANY"
+        }
+      ]
+    },
+    {
+      "name": "classDeclaration",
+      "content": "~if(annotations)~~annotations:{it|~it~};separator=\"\\n\"~\n~endif~\n~if(scope)~~scope~ ~endif~class ~name~~if(typeParameters)~<~typeParameters:{it|~it~};separator=\", \"~> ~endif~~if(extending)~ extends ~extending~~endif~~if(implement)~ implements ~implement:{it|~it~};separator=\", \"~~endif~ {\n~if(fields)~\n\n\t~fields:{it|~it~};separator=\"\\n\"~\n~endif~\n~if(constructors)~\n\n\t~constructors:{it|~it~};separator=\"\\n\\n\"~\n~endif~\n~if(methods)~\n\n\t~methods:{it|~it~};separator=\"\\n\\n\"~\n~endif~\n~if(nested)~\n\n\t~nested:{it|~it~};separator=\"\\n\\n\"~\n~endif~\n}",
+      "parameters": [
+        {
+          "name": "annotations",
+          "qty": "MANY"
+        },
+        {
+          "name": "scope",
+          "qty": "ONE"
+        },
+        {
+          "name": "name",
+          "qty": "ONE"
+        },
+        {
+          "name": "typeParameters",
+          "qty": "MANY"
+        },
+        {
+          "name": "extending",
+          "qty": "ONE"
+        },
+        {
+          "name": "implement",
+          "qty": "MANY"
+        },
+        {
+          "name": "fields",
+          "qty": "MANY"
+        },
+        {
+          "name": "constructors",
+          "qty": "MANY"
+        },
+        {
+          "name": "methods",
+          "qty": "MANY"
+        },
+        {
+          "name": "nested",
+          "qty": "MANY"
+        }
+      ]
+    },
+    {
+      "name": "interfaceMethod",
+      "content": "~if(annotations)~~annotations:{it|~it~};separator=\"\\n\"~\n~endif~\n~if(scope)~~scope~ ~endif~~if(type)~~type~ ~else~void ~endif~~name~(~parameters:{it|~it~};separator=\", \"~)~if(throws)~ throws ~throws:{it|~it~};separator=\", \"~~endif~;",
+      "parameters": [
+        {
+          "name": "scope",
+          "qty": "ONE"
+        },
+        {
+          "name": "name",
+          "qty": "ONE"
+        },
+        {
+          "name": "type",
+          "qty": "ONE"
+        },
+        {
+          "name": "annotations",
+          "qty": "MANY"
+        },
+        {
+          "name": "parameters",
+          "qty": "MANY"
+        },
+        {
+          "name": "throws",
+          "qty": "MANY"
+        }
+      ]
+    },
+    {
+      "name": "annotation",
+      "content": "@~name~",
+      "parameters": [
+        {
+          "name": "name",
+          "qty": "ONE"
+        }
+      ]
+    },
+    {
+      "name": "returnExpression",
+      "content": "return ~expression~;",
+      "parameters": [
+        {
+          "name": "expression",
+          "qty": "ONE"
+        }
+      ]
+    },
+    {
+      "name": "optional",
+      "content": "java.util.Optional<~type~~gt()~ ",
+      "parameters": [
+        {
+          "name": "type",
+          "qty": "ONE"
+        }
+      ]
+    },
+    {
+      "name": "collectionOf",
+      "content": "java.util.Collection<~type~~gt()~ ",
+      "parameters": [
+        {
+          "name": "type",
+          "qty": "ONE"
+        }
+      ]
+    },
+    {
+      "name": "importDeclaration",
+      "content": "~if(isStatic)~static ~endif~~name~~if(isAsterisk)~.*~endif~",
+      "parameters": [
+        {
+          "name": "name",
+          "qty": "ONE"
+        },
+        {
+          "name": "isStatic",
+          "qty": "ONE"
+        },
+        {
+          "name": "isAsterisk",
+          "qty": "ONE"
+        }
+      ]
+    },
+    {
+      "name": "newInstance",
+      "content": "new ~type~(~arguments:{it|~it~};separator=\", \"~)",
+      "parameters": [
+        {
+          "name": "type",
+          "qty": "ONE"
+        },
+        {
+          "name": "arguments",
+          "qty": "MANY"
+        }
+      ]
+    },
+    {
+      "name": "gt",
+      "content": ">"
+    },
+    {
+      "name": "classMethod",
+      "content": "~if(annotations)~~annotations:{it|~it~};separator=\"\\n\"~\n~endif~\n~if(scope)~~scope~ ~endif~~if(type)~~type~ ~else~void ~endif~~name~(~parameters:{it|~it~};separator=\", \"~)~if(throws)~ throws ~throws:{it|~it~};separator=\", \"~~endif~ {\n    ~statements:{it|~it~};separator=\"\\n\"~\n}",
+      "parameters": [
+        {
+          "name": "scope",
+          "qty": "ONE"
+        },
+        {
+          "name": "name",
+          "qty": "ONE"
+        },
+        {
+          "name": "type",
+          "qty": "ONE"
+        },
+        {
+          "name": "annotations",
+          "qty": "MANY"
+        },
+        {
+          "name": "parameters",
+          "qty": "MANY"
+        },
+        {
+          "name": "throws",
+          "qty": "MANY"
+        },
+        {
+          "name": "statements",
+          "qty": "MANY"
+        }
+      ]
+    },
+    {
+      "name": "eom",
+      "content": "}"
+    },
+    {
+      "name": "block",
+      "content": "~statements:{it|~it~};separator=\"\\n\"~",
+      "parameters": [
+        {
+          "name": "statements",
+          "qty": "MANY"
+        }
+      ]
+    }
+  ]
+}

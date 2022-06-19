@@ -1,0 +1,856 @@
+{
+  "packages" : [ {
+    "name" : "nextgen.lambda.domain.maven",
+    "entities" : [ {
+      "name" : "Project",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "name",
+        "type" : "String"
+      }, {
+        "name" : "root",
+        "type" : "String"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return this.name;" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "root",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return this.root;" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "srcMain",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return root + java.io.File.separator + \"src/main\";" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "srcMainJava",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return srcMain() + java.io.File.separator + \"java\";" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "srcMainResources",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return srcMain() + java.io.File.separator + \"resources\";" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Project",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "name",
+          "type" : "String"
+        }, {
+          "name" : "root",
+          "type" : "String"
+        } ],
+        "statements" : [ "this.name = name;", "this.root = root;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    } ],
+    "interfaces" : [ ],
+    "enums" : [ ]
+  }, {
+    "name" : "nextgen.lambda.domain.actions",
+    "entities" : [ ],
+    "interfaces" : [ {
+      "name" : "Task",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ {
+        "type" : "T",
+        "name" : "run",
+        "scope" : "",
+        "parameters" : [ ],
+        "statements" : [ ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ "FunctionalInterface" ]
+    } ],
+    "enums" : [ ]
+  }, {
+    "name" : "nextgen.lambda.domain.graph",
+    "entities" : [ {
+      "name" : "Graph",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Visitor",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Relation",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Node",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    } ],
+    "interfaces" : [ ],
+    "enums" : [ ]
+  }, {
+    "name" : "nextgen.lambda.domain.templates",
+    "entities" : [ {
+      "name" : "TemplateGroup",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      }, {
+        "name" : "stGroup",
+        "type" : "org.stringtemplate.v4.STGroup"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"name\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "java.util.stream.Stream<Template>",
+        "name" : "templates",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getJsonArray(\"templates\", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Template::new);" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "org.stringtemplate.v4.STGroup",
+        "name" : "stGroup",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return stGroup;" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "toSTG",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "final String stg = \"delimiters \\\"~\\\", \\\"~\\\"\" + \"\\n\\ngt() ::= \\\">\\\"\" + \"\\n\\neot() ::= <<~gt()~~gt()~>>\" + \"\\n\\nSTGroupTemplate(DELIMITER,TEMPLATES) ::= <<delimiters \\\"~DELIMITER~\\\",\\\"~DELIMITER~\\\"\" + \"\\n\\n~TEMPLATES:{it|~it~};separator=\\\"\\\\n\\\\n\\\"~\" + \"\\n\\neom() ::= \\\"}\\\"\" + \"\\n\\ngt() ::= \\\">\\\"\" + \"\\n\\n>>\" + \"\\n\\nSTTemplate(CONTENT,NAME,PARAMS) ::= <<~NAME~(~PARAMS:{it|~it~};separator=\\\",\\\"~) ::= <<~CONTENT~ ~eot()~>>\";", "final org.stringtemplate.v4.STGroup templateGroup = new org.stringtemplate.v4.STGroupString(name(), stg, '~', '~');", "final org.stringtemplate.v4.ST stGroupTemplate = templateGroup.getInstanceOf(\"STGroupTemplate\");", "stGroupTemplate.add(\"DELIMITER\", \"~\");", "templates().filter(template -> !template.name().equals(\"eom\")).filter(template -> !template.name().equals(\"gt\")).forEach(template -> {\n    final org.stringtemplate.v4.ST stTemplate = templateGroup.getInstanceOf(\"STTemplate\");\n    stTemplate.add(\"NAME\", template.name());\n    stTemplate.add(\"CONTENT\", template.content());\n    template.parameters().forEach(parameter -> stTemplate.add(\"PARAMS\", parameter.name()));\n    stGroupTemplate.add(\"TEMPLATES\", stTemplate);\n});", "final org.stringtemplate.v4.STGroup stGroup = new org.stringtemplate.v4.STGroupString(name(), stGroupTemplate.render(), '~', '~');", "stGroup.registerRenderer(Object.class, (o, formatString, locale) -> {\n    final String text = o.toString();\n    if (formatString == null)\n        return text;\n    final int length = text.length();\n    final int lastIndex = text.lastIndexOf(\".\");\n    switch(formatString) {\n        case \"sn\":\n        case \"simpleName\":\n            if (lastIndex == -1)\n                return text;\n            return text.substring(lastIndex + 1);\n        case \"cap\":\n        case \"capitalize\":\n            return Character.toUpperCase(text.charAt(0)) + (length > 1 ? text.substring(1) : \"\");\n        case \"tu\":\n        case \"toUpper\":\n            return text.toUpperCase();\n        case \"lf\":\n        case \"lowFirst\":\n            return Character.toLowerCase(text.charAt(0)) + (length > 1 ? text.substring(1) : \"\");\n        case \"tl\":\n        case \"toLower\":\n            return text.toLowerCase();\n        default:\n            return o.toString();\n    }\n});", "return stGroupTemplate.render();" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "TemplateGroup",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "delegate",
+          "type" : "io.vertx.core.json.JsonObject"
+        } ],
+        "statements" : [ "this.delegate = delegate;", "this.stGroup = new org.stringtemplate.v4.STGroupString(name(), toSTG(), '~', '~');" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "TemplateParameter",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"name\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "qty",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"qty\");" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "TemplateParameter",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "delegate",
+          "type" : "io.vertx.core.json.JsonObject"
+        } ],
+        "statements" : [ "this.delegate = delegate;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Template",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"name\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "content",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"content\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "java.util.stream.Stream<TemplateParameter>",
+        "name" : "parameters",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getJsonArray(\"parameters\", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(TemplateParameter::new);" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Template",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "delegate",
+          "type" : "io.vertx.core.json.JsonObject"
+        } ],
+        "statements" : [ "this.delegate = delegate;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    } ],
+    "interfaces" : [ ],
+    "enums" : [ ]
+  }, {
+    "name" : "nextgen.lambda.domain.core",
+    "entities" : [ {
+      "name" : "Field",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"name\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "type",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"type\");" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Field",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "delegate",
+          "type" : "io.vertx.core.json.JsonObject"
+        } ],
+        "statements" : [ "this.delegate = delegate;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Statement",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "expression",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"expression\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"name\");" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Statement",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "delegate",
+          "type" : "io.vertx.core.json.JsonObject"
+        } ],
+        "statements" : [ "this.delegate = delegate;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Enum",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"name\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "values",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"values\");" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Enum",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "delegate",
+          "type" : "io.vertx.core.json.JsonObject"
+        } ],
+        "statements" : [ "this.delegate = delegate;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Method",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"name\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "type",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"type\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "java.util.stream.Stream<Parameter>",
+        "name" : "parameters",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getJsonArray(\"packages\", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Parameter::new);" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "java.util.stream.Stream<Statement>",
+        "name" : "statements",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getJsonArray(\"packages\", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Statement::new);" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Method",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "delegate",
+          "type" : "io.vertx.core.json.JsonObject"
+        } ],
+        "statements" : [ "this.delegate = delegate;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Package",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"name\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "java.util.stream.Stream<Entity>",
+        "name" : "entities",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getJsonArray(\"entities\", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Entity::new);" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "java.util.stream.Stream<Enum>",
+        "name" : "enums",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getJsonArray(\"enums\", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Enum::new);" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "java.util.stream.Stream<Interface>",
+        "name" : "interfaces",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getJsonArray(\"interfaces\", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Interface::new);" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Package",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "delegate",
+          "type" : "io.vertx.core.json.JsonObject"
+        } ],
+        "statements" : [ "this.delegate = delegate;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Model",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "path",
+        "type" : "String"
+      }, {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      } ],
+      "methods" : [ {
+        "type" : "java.util.stream.Stream<Package>",
+        "name" : "packages",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getJsonArray(\"packages\", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Package::new);" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Model",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "path",
+          "type" : "String"
+        } ],
+        "statements" : [ "this.path = path;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Interface",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"name\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "java.util.stream.Stream<Method>",
+        "name" : "members",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getJsonArray(\"members\", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Method::new);" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Interface",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "delegate",
+          "type" : "io.vertx.core.json.JsonObject"
+        } ],
+        "statements" : [ "this.delegate = delegate;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Parameter",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"name\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "String",
+        "name" : "type",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"type\");" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Parameter",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "delegate",
+          "type" : "io.vertx.core.json.JsonObject"
+        } ],
+        "statements" : [ "this.delegate = delegate;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Entity",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "delegate",
+        "type" : "io.vertx.core.json.JsonObject"
+      } ],
+      "methods" : [ {
+        "type" : "String",
+        "name" : "name",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getString(\"name\");" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "java.util.stream.Stream<Field>",
+        "name" : "fields",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getJsonArray(\"fields\", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Field::new);" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "java.util.stream.Stream<Method>",
+        "name" : "methods",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return delegate.getJsonArray(\"methods\", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Method::new);" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Entity",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "delegate",
+          "type" : "io.vertx.core.json.JsonObject"
+        } ],
+        "statements" : [ "this.delegate = delegate;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    } ],
+    "interfaces" : [ ],
+    "enums" : [ ]
+  }, {
+    "name" : "nextgen.lambda.domain.ui",
+    "entities" : [ {
+      "name" : "Navigator",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "root",
+        "type" : "NavigatorTreeNode"
+      } ],
+      "methods" : [ ],
+      "constructors" : [ {
+        "name" : "Navigator",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "model",
+          "type" : "io.vertx.core.Vertx"
+        } ],
+        "statements" : [ "setModel(new javax.swing.tree.DefaultTreeModel(root = new NavigatorTreeNode(this, model)));", "addMouseListener(new java.awt.event.MouseAdapter() {\n\n    @Override\n    public void mouseClicked(java.awt.event.MouseEvent e) {\n        final javax.swing.tree.TreePath selectionPath = getPathForLocation(e.getX(), e.getY());\n        if (selectionPath == null)\n            return;\n        final nextgen.lambda.domain.ui.NavigatorTreeNode selected = (nextgen.lambda.domain.ui.NavigatorTreeNode) selectionPath.getLastPathComponent();\n        if (javax.swing.SwingUtilities.isRightMouseButton(e)) {\n            final javax.swing.JPopupMenu popupMenu = new javax.swing.JPopupMenu();\n            selected.actions().forEach(popupMenu::add);\n            if (popupMenu.getComponentCount() != 0)\n                javax.swing.SwingUtilities.invokeLater(() -> popupMenu.show(nextgen.lambda.domain.ui.Navigator.this, e.getX(), e.getY()));\n        }\n    }\n});" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "SelectEventsHandler",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Editor",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "ui",
+        "type" : "UI"
+      } ],
+      "methods" : [ ],
+      "constructors" : [ {
+        "name" : "Editor",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "ui",
+          "type" : "UI"
+        } ],
+        "statements" : [ "this.ui = ui;", "setBackground(java.awt.Color.DARK_GRAY);" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "CanvasEventHandler",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "CanvasZoomHandler",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Action",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "task",
+        "type" : "nextgen.lambda.domain.actions.Task"
+      } ],
+      "methods" : [ {
+        "type" : "void",
+        "name" : "actionPerformed",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "event",
+          "type" : "java.awt.event.ActionEvent"
+        } ],
+        "statements" : [ "try {\n    task.run();\n} catch (Throwable e) {\n    throw new RuntimeException(e);\n}" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "Action",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "name",
+          "type" : "String"
+        }, {
+          "name" : "task",
+          "type" : "nextgen.lambda.domain.actions.Task"
+        } ],
+        "statements" : [ "super(name);", "this.task = task;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "NavigatorTreeNode",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "icon",
+        "type" : "javax.swing.Icon"
+      }, {
+        "name" : "tooltip",
+        "type" : "String"
+      }, {
+        "name" : "navigator",
+        "type" : "Navigator"
+      } ],
+      "methods" : [ {
+        "type" : "java.util.Collection<Action>",
+        "name" : "actions",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return java.util.Collections.emptyList();" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "javax.swing.tree.DefaultTreeModel",
+        "name" : "treeModel",
+        "scope" : "public",
+        "parameters" : [ ],
+        "statements" : [ "return (javax.swing.tree.DefaultTreeModel) navigator.getModel();" ],
+        "annotations" : [ ]
+      }, {
+        "type" : "void",
+        "name" : "addModel",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "model",
+          "type" : "Object"
+        } ],
+        "statements" : [ "final NavigatorTreeNode child = new NavigatorTreeNode(navigator, model);", "int n = getChildCount();", "if (n == 0) {\n    add(child);\n    treeModel().nodesWereInserted(this, new int[] { n });\n    return;\n}", "for (int i = 0; i < n; i++) {\n    final NavigatorTreeNode node = (NavigatorTreeNode) getChildAt(i);\n    if (node.getUserObject().toString().compareTo(child.getUserObject().toString()) > 0) {\n        insert(child, i);\n        treeModel().nodesWereInserted(this, new int[] { i });\n        return;\n    }\n}", "add(child);", "treeModel().nodesWereInserted(this, new int[] { n });" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ {
+        "name" : "NavigatorTreeNode",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "navigator",
+          "type" : "Navigator"
+        }, {
+          "name" : "model",
+          "type" : "Object"
+        } ],
+        "statements" : [ "super(model);", "this.navigator = navigator;" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Canvas",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "ui",
+        "type" : "UI"
+      }, {
+        "name" : "elements",
+        "type" : "java.util.Map<Object,CanvasElement>"
+      }, {
+        "name" : "selectEventHandler",
+        "type" : "SelectEventsHandler"
+      }, {
+        "name" : "canvasZoomHandler",
+        "type" : "CanvasZoomHandler"
+      }, {
+        "name" : "canvasEventHandler",
+        "type" : "CanvasEventHandler"
+      }, {
+        "name" : "highlightedColor",
+        "type" : "java.awt.Color"
+      }, {
+        "name" : "selectedColor",
+        "type" : "java.awt.Color"
+      } ],
+      "methods" : [ ],
+      "constructors" : [ {
+        "name" : "Canvas",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "ui",
+          "type" : "UI"
+        } ],
+        "statements" : [ "this.ui = ui;", "setBackground(java.awt.Color.DARK_GRAY);" ],
+        "annotations" : [ ]
+      } ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "UI",
+      "scope" : "public",
+      "fields" : [ {
+        "name" : "navigator",
+        "type" : "Navigator"
+      }, {
+        "name" : "canvas",
+        "type" : "Canvas"
+      }, {
+        "name" : "editor",
+        "type" : "Editor"
+      } ],
+      "methods" : [ {
+        "type" : "void",
+        "name" : "showUI",
+        "scope" : "public",
+        "parameters" : [ {
+          "name" : "onClose",
+          "type" : "Runnable"
+        } ],
+        "statements" : [ "final java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();", "final java.awt.Dimension preferredSize = new java.awt.Dimension(800, 768);", "setMinimumSize(preferredSize);", "setPreferredSize(preferredSize);", "setMaximumSize(screenSize);", "setSize(preferredSize);", "final javax.swing.JPanel contentPanel = new javax.swing.JPanel(new java.awt.BorderLayout());", "contentPanel.add(navigator, java.awt.BorderLayout.WEST);", "contentPanel.add(canvas, java.awt.BorderLayout.CENTER);", "contentPanel.add(editor, java.awt.BorderLayout.EAST);", "getContentPane().add(contentPanel, java.awt.BorderLayout.CENTER);", "addWindowListener(new java.awt.event.WindowAdapter() {\n\n    @Override\n    public void windowClosed(java.awt.event.WindowEvent e) {\n        onClose.run();\n    }\n});", "javax.swing.SwingUtilities.invokeLater(() -> {\n    pack();\n    setLocationByPlatform(true);\n    setVisible(true);\n});" ],
+        "annotations" : [ ]
+      } ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "CanvasElement",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    } ],
+    "interfaces" : [ ],
+    "enums" : [ ]
+  }, {
+    "name" : "nextgen.lambda.domain.os",
+    "entities" : [ {
+      "name" : "OS",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "File",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    }, {
+      "name" : "Directory",
+      "scope" : "public",
+      "fields" : [ ],
+      "methods" : [ ],
+      "constructors" : [ ],
+      "nested" : [ ],
+      "annotations" : [ ]
+    } ],
+    "interfaces" : [ ],
+    "enums" : [ ]
+  } ]
+}
