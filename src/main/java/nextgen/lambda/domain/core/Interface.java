@@ -13,9 +13,6 @@ public class Interface {
 	}
 
 	public java.util.stream.Stream<Method> members() {
-	    return delegate.getJsonArray("members", new io.vertx.core.json.JsonArray())
-	             .stream()
-	             .map(element -> (io.vertx.core.json.JsonObject) element)
-	             .map(Method::new);
+	    return delegate.getJsonArray("members", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Method::new);
 	}
 }

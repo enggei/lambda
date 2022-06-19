@@ -6,7 +6,6 @@ import static java.lang.String.*;
 public class LambdaTests {
 
    private static final String mainResources = "src/main/resources";
-   private static final String testResources = "src/test/resources";
    private static final String mainSrc = "src/main/java";
 
    public static void main(String[] args) throws java.io.IOException {

@@ -17,16 +17,10 @@ public class Method {
 	}
 
 	public java.util.stream.Stream<Parameter> parameters() {
-	    return delegate.getJsonArray("packages", new io.vertx.core.json.JsonArray())
-	             .stream()
-	             .map(element -> (io.vertx.core.json.JsonObject) element)
-	             .map(Parameter::new);
+	    return delegate.getJsonArray("packages", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Parameter::new);
 	}
 
 	public java.util.stream.Stream<Statement> statements() {
-	    return delegate.getJsonArray("packages", new io.vertx.core.json.JsonArray())
-	             .stream()
-	             .map(element -> (io.vertx.core.json.JsonObject) element)
-	             .map(Statement::new);
+	    return delegate.getJsonArray("packages", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Statement::new);
 	}
 }

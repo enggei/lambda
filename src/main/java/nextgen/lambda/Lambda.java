@@ -214,7 +214,10 @@ public class Lambda {
             try {
                final JsonObject mapper = one.getJsonObject("mapper");
                if (mapper != null) mapClassDeclaration(stGroup, one, mapper).ifPresent(mapped -> template.add(one.getString("template"), mapped));
-               else template.add(one.getString("template"), model.getValue(one.getString("model")));
+               else {
+                  final Object value = model.getValue(one.getString("model"));
+                  if (value != null && value.toString().trim().length() > 0) template.add(one.getString("template"), value);
+               }
             } catch (Throwable throwable) {
                System.err.println("ERROR with " + template.getName());
                System.err.println("\t" + throwable.getMessage());
@@ -365,19 +368,6 @@ public class Lambda {
       return model;
    }
 
-   private static ST annotation(STGroup stGroup, JsonObject model) {
-      final ST st = stGroup.getInstanceOf("annotation");
-      st.add("name", model.getString("name"));
-      return st;
-   }
-
-   private static ST parameter(STGroup stGroup, JsonObject model) {
-      final ST st = stGroup.getInstanceOf("parameter");
-      st.add("type", model.getString("type"));
-      st.add("name", model.getString("name"));
-      return st;
-   }
-
    private static void parse(String path, FileSystem fileSystem, JsonObject lambda) {
 
       final JsonArray packages = lambda.getJsonArray("packages");
@@ -427,14 +417,15 @@ public class Lambda {
       model.put("name", declaration.getName().asString());
       model.put("scope", declaration.getModifiers().stream().map(modifier -> modifier.getKeyword().asString()).collect(java.util.stream.Collectors.joining(" ")));
       model.put("values", new JsonArray());
-      declaration.getEntries().forEach(element-> model.getJsonArray("values").add(element.getNameAsString()));
+      declaration.getEntries().forEach(element -> model.getJsonArray("values").add(element.getNameAsString()));
       return model;
    }
+
    public static JsonObject mapClassDeclaration(ClassOrInterfaceDeclaration declaration) {
       final JsonObject model = new JsonObject();
       model.put("name", declaration.getName().asString());
       model.put("scope", declaration.getModifiers().stream().map(element -> element.getKeyword().asString()).collect(java.util.stream.Collectors.joining(" ")));
-      model.put("extending", declaration.getExtendedTypes().stream().map(com.github.javaparser.ast.type.ClassOrInterfaceType::asString).collect(java.util.stream.Collectors.joining(", ")));
+      model.put("extends", declaration.getExtendedTypes().stream().map(com.github.javaparser.ast.type.ClassOrInterfaceType::asString).collect(java.util.stream.Collectors.joining(", ")));
 
       model.put("fields", new JsonArray());
       model.put("methods", new JsonArray());
@@ -444,7 +435,7 @@ public class Lambda {
       model.put("typeParameters", new io.vertx.core.json.JsonArray());
 
       declaration.getTypeParameters().forEach(element -> model.getJsonArray("typeParameters").add(element.getName().asString()));
-      declaration.getAnnotations().forEach(element -> model.getJsonArray("annotations").add(element.getName().asString()));
+      declaration.getAnnotations().stream().map(nextgen.lambda.Lambda::mapAnnotation).forEach(element -> model.getJsonArray("annotations").add(element));
 
       declaration.getFields()
          .forEach(fieldDeclaration -> fieldDeclaration.getVariables()
@@ -463,6 +454,10 @@ public class Lambda {
       return model;
    }
 
+   private static io.vertx.core.json.JsonObject mapAnnotation(com.github.javaparser.ast.expr.AnnotationExpr element) {
+      return new io.vertx.core.json.JsonObject().put("name", element.getName().asString());
+   }
+
    private static io.vertx.core.json.JsonObject mapConstructorDeclaration(com.github.javaparser.ast.body.ConstructorDeclaration declaration) {
       final io.vertx.core.json.JsonObject model = new io.vertx.core.json.JsonObject();
       model.put("name", declaration.getNameAsString());
@@ -471,7 +466,7 @@ public class Lambda {
       model.put("statements", new io.vertx.core.json.JsonArray());
       model.put("annotations", new io.vertx.core.json.JsonArray());
 
-      declaration.getAnnotations().forEach(annotationExpr -> model.getJsonArray("annotations").add(annotationExpr.getName().asString()));
+      declaration.getAnnotations().stream().map(nextgen.lambda.Lambda::mapAnnotation).forEach(element -> model.getJsonArray("annotations").add(element));
 
       declaration.getParameters()
          .forEach(parameterDeclaration -> model.getJsonArray("parameters")
@@ -492,7 +487,8 @@ public class Lambda {
       model.put("parameters", new io.vertx.core.json.JsonArray());
       model.put("statements", new io.vertx.core.json.JsonArray());
       model.put("annotations", new io.vertx.core.json.JsonArray());
-      declaration.getAnnotations().forEach(annotationExpr -> model.getJsonArray("annotations").add(annotationExpr.getName().asString()));
+
+      declaration.getAnnotations().stream().map(nextgen.lambda.Lambda::mapAnnotation).forEach(element -> model.getJsonArray("annotations").add(element));
 
       declaration.getParameters().forEach(parameterDeclaration -> {
          final io.vertx.core.json.JsonObject parameter = mapParameter(parameterDeclaration);
@@ -524,6 +520,13 @@ public class Lambda {
    }
 
    public static Stream<JsonObject> streamJsonObjects(String name, JsonObject model) {
-      return model.getJsonArray(name, new JsonArray()).stream().map(o -> (JsonObject) o);
+      return model.getJsonArray(name, new JsonArray()).stream().map(o -> {
+         try
+         {
+            return (JsonObject) o;
+         }catch (Throwable throwable) {
+            throw new RuntimeException(throwable);
+         }
+      });
    }
 }

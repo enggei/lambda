@@ -10,9 +10,6 @@ public class Model {
 	}
 
 	public java.util.stream.Stream<Package> packages() {
-	    return delegate.getJsonArray("packages", new io.vertx.core.json.JsonArray())
-	             .stream()
-	             .map(element -> (io.vertx.core.json.JsonObject) element)
-	             .map(Package::new);
+	    return delegate.getJsonArray("packages", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Package::new);
 	}
 }

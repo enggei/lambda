@@ -4,6 +4,7 @@
     "entities" : [ {
       "name" : "Project",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "name",
         "type" : "String"
@@ -61,7 +62,8 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     } ],
     "interfaces" : [ ],
     "enums" : [ ]
@@ -71,6 +73,7 @@
     "interfaces" : [ {
       "name" : "Task",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ ],
       "methods" : [ {
         "type" : "T",
@@ -82,7 +85,10 @@
       } ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ "FunctionalInterface" ]
+      "annotations" : [ {
+        "name" : "FunctionalInterface"
+      } ],
+      "typeParameters" : [ "T" ]
     } ],
     "enums" : [ ]
   }, {
@@ -90,35 +96,43 @@
     "entities" : [ {
       "name" : "Graph",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ ],
       "methods" : [ ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Visitor",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ ],
       "methods" : [ ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Relation",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ ],
       "methods" : [ ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Node",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ ],
       "methods" : [ ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     } ],
     "interfaces" : [ ],
     "enums" : [ ]
@@ -127,6 +141,7 @@
     "entities" : [ {
       "name" : "TemplateGroup",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "delegate",
         "type" : "io.vertx.core.json.JsonObject"
@@ -174,10 +189,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "TemplateParameter",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "delegate",
         "type" : "io.vertx.core.json.JsonObject"
@@ -208,10 +225,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Template",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "delegate",
         "type" : "io.vertx.core.json.JsonObject"
@@ -249,7 +268,8 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     } ],
     "interfaces" : [ ],
     "enums" : [ ]
@@ -258,6 +278,7 @@
     "entities" : [ {
       "name" : "Field",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "delegate",
         "type" : "io.vertx.core.json.JsonObject"
@@ -288,10 +309,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Statement",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "delegate",
         "type" : "io.vertx.core.json.JsonObject"
@@ -322,10 +345,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Enum",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "delegate",
         "type" : "io.vertx.core.json.JsonObject"
@@ -356,10 +381,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Method",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "delegate",
         "type" : "io.vertx.core.json.JsonObject"
@@ -404,10 +431,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Package",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "delegate",
         "type" : "io.vertx.core.json.JsonObject"
@@ -452,10 +481,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Model",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "path",
         "type" : "String"
@@ -482,10 +513,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Interface",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "delegate",
         "type" : "io.vertx.core.json.JsonObject"
@@ -516,10 +549,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Parameter",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "delegate",
         "type" : "io.vertx.core.json.JsonObject"
@@ -550,10 +585,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Entity",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ {
         "name" : "delegate",
         "type" : "io.vertx.core.json.JsonObject"
@@ -591,7 +628,8 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     } ],
     "interfaces" : [ ],
     "enums" : [ ]
@@ -600,6 +638,7 @@
     "entities" : [ {
       "name" : "Navigator",
       "scope" : "public",
+      "extends" : "javax.swing.JTree",
       "fields" : [ {
         "name" : "root",
         "type" : "NavigatorTreeNode"
@@ -616,18 +655,22 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "SelectEventsHandler",
       "scope" : "public",
+      "extends" : "org.piccolo2d.event.PBasicInputEventHandler",
       "fields" : [ ],
       "methods" : [ ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Editor",
       "scope" : "public",
+      "extends" : "javax.swing.JPanel",
       "fields" : [ {
         "name" : "ui",
         "type" : "UI"
@@ -644,26 +687,32 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "CanvasEventHandler",
       "scope" : "public",
+      "extends" : "org.piccolo2d.event.PBasicInputEventHandler",
       "fields" : [ ],
       "methods" : [ ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "CanvasZoomHandler",
       "scope" : "public",
+      "extends" : "org.piccolo2d.event.PBasicInputEventHandler",
       "fields" : [ ],
       "methods" : [ ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Action",
       "scope" : "public",
+      "extends" : "javax.swing.AbstractAction",
       "fields" : [ {
         "name" : "task",
         "type" : "nextgen.lambda.domain.actions.Task"
@@ -677,7 +726,9 @@
           "type" : "java.awt.event.ActionEvent"
         } ],
         "statements" : [ "try {\n    task.run();\n} catch (Throwable e) {\n    throw new RuntimeException(e);\n}" ],
-        "annotations" : [ ]
+        "annotations" : [ {
+          "name" : "Override"
+        } ]
       } ],
       "constructors" : [ {
         "name" : "Action",
@@ -693,10 +744,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "NavigatorTreeNode",
       "scope" : "public",
+      "extends" : "javax.swing.tree.DefaultMutableTreeNode",
       "fields" : [ {
         "name" : "icon",
         "type" : "javax.swing.Icon"
@@ -746,10 +799,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Canvas",
       "scope" : "public",
+      "extends" : "org.piccolo2d.PCanvas",
       "fields" : [ {
         "name" : "ui",
         "type" : "UI"
@@ -784,10 +839,12 @@
         "annotations" : [ ]
       } ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "UI",
       "scope" : "public",
+      "extends" : "javax.swing.JFrame",
       "fields" : [ {
         "name" : "navigator",
         "type" : "Navigator"
@@ -811,15 +868,18 @@
       } ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "CanvasElement",
       "scope" : "public",
+      "extends" : "org.piccolo2d.PNode",
       "fields" : [ ],
       "methods" : [ ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     } ],
     "interfaces" : [ ],
     "enums" : [ ]
@@ -828,27 +888,33 @@
     "entities" : [ {
       "name" : "OS",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ ],
       "methods" : [ ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "File",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ ],
       "methods" : [ ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     }, {
       "name" : "Directory",
       "scope" : "public",
+      "extends" : "",
       "fields" : [ ],
       "methods" : [ ],
       "constructors" : [ ],
       "nested" : [ ],
-      "annotations" : [ ]
+      "annotations" : [ ],
+      "typeParameters" : [ ]
     } ],
     "interfaces" : [ ],
     "enums" : [ ]

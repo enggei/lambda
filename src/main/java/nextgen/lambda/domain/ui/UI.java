@@ -19,11 +19,16 @@ public class UI extends javax.swing.JFrame {
 	    contentPanel.add(editor, java.awt.BorderLayout.EAST);
 	    getContentPane().add(contentPanel, java.awt.BorderLayout.CENTER);
 	    addWindowListener(new java.awt.event.WindowAdapter() {
-	       @Override
-	       public void windowClosed(java.awt.event.WindowEvent e) {
-	          onClose.run();
-	       }
+
+	        @Override
+	        public void windowClosed(java.awt.event.WindowEvent e) {
+	            onClose.run();
+	        }
 	    });
-	    javax.swing.SwingUtilities.invokeLater(() -> { pack(); setLocationByPlatform(true); setVisible(true); });
+	    javax.swing.SwingUtilities.invokeLater(() -> {
+	        pack();
+	        setLocationByPlatform(true);
+	        setVisible(true);
+	    });
 	}
 }
