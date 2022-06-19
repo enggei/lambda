@@ -26,7 +26,7 @@ public class LambdaTests {
       newModel.put("packages", new io.vertx.core.json.JsonArray());
 
       nextgen.lambda.Lambda.files(mainSrc, "java")
-         .filter(file -> file.toString().contains("/domain/"))
+        // .filter(file -> file.toString().contains("/domain/"))
          .peek(file -> System.out.println("parse " + file))
          .filter(parse(newModel))
          .findFirst()
@@ -47,9 +47,9 @@ public class LambdaTests {
                   java.nio.file.Files.writeString(newModelFile, newModel.encodePrettily());
                   System.out.println("w " + newModelFile);
 
-                  LambdaTests.main(new String[]{
-                     newModelName
-                  });
+//                  LambdaTests.main(new String[]{
+//                     newModelName
+//                  });
 
                } catch (java.io.IOException e) {
                   throw new RuntimeException(e);
@@ -124,9 +124,5 @@ public class LambdaTests {
 
    private static io.vertx.core.json.JsonObject coreMapper() throws java.io.IOException {
       return new io.vertx.core.json.JsonObject(java.nio.file.Files.readString(java.nio.file.Path.of(join(separator, mainResources, "core_mapper.json"))));
-   }
-
-   private static io.vertx.core.json.JsonObject javaGroup() throws java.io.IOException {
-      return new io.vertx.core.json.JsonObject(java.nio.file.Files.readString(java.nio.file.Path.of(join(separator, mainResources, "Java.json"))));
    }
 }

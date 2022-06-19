@@ -13,10 +13,16 @@ public class Entity {
 	}
 
 	public java.util.stream.Stream<Field> fields() {
-	    return delegate.getJsonArray("fields", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Field::new);
+	    return delegate.getJsonArray("fields", new io.vertx.core.json.JsonArray())
+	             .stream()
+	             .map(element -> (io.vertx.core.json.JsonObject) element)
+	             .map(Field::new);
 	}
 
 	public java.util.stream.Stream<Method> methods() {
-	    return delegate.getJsonArray("methods", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(Method::new);
+	    return delegate.getJsonArray("methods", new io.vertx.core.json.JsonArray())
+	             .stream()
+	             .map(element -> (io.vertx.core.json.JsonObject) element)
+	             .map(Method::new);
 	}
 }

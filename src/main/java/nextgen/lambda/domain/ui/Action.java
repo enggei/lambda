@@ -12,9 +12,9 @@ public class Action extends javax.swing.AbstractAction {
 	@Override
 	public void actionPerformed(java.awt.event.ActionEvent event) {
 	    try {
-	        task.run();
+	    	task.run();
 	    } catch (Throwable e) {
-	        throw new RuntimeException(e);
+	    	throw new RuntimeException(e);
 	    }
 	}
 }

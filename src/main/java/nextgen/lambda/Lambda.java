@@ -10,57 +10,49 @@ import java.io.*;
 import java.util.stream.*;
 
 import static java.io.File.*;
+import static java.lang.String.join;
 
 public class Lambda {
+   public static void main(String[] args) {
 
+      final io.vertx.core.VertxOptions options = new io.vertx.core.VertxOptions();
 
-//   public static void main(String[] args) {
-//
-//      final VertxOptions options = new VertxOptions();
-//
-//      final Vertx vertx = Vertx.vertx(options);
-//      final FileSystem fileSystem = vertx.fileSystem();
-//      final EventBus eventBus = vertx.eventBus();
-//
-//      final Project project = new Project("Lambda", ".");
-//      final String modelPath = join(separator, project.srcMainResources(), "lambda.json");
-//      final String templatePath = join(separator, project.srcMainResources(), "Java.json");
-//
-//      final nextgen.lambda.domain.core.Model model = new nextgen.lambda.domain.core.Model(modelPath);
-//      final org.stringtemplate.v4.STGroup stGroup = new org.stringtemplate.v4.STGroupFile(join(separator, project.srcMainResources(), "Java.stg"));
-//      stgToJson(fileSystem, stGroup);
-//
-//      eventBus.consumer("lambda", write(fileSystem, project, stGroup));
-//
-//      try {
-//         javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarculaLaf());
-//      } catch (javax.swing.UnsupportedLookAndFeelException ignore) {
-//      }
-//
-//      final UI ui = new UI();
-//      ui.setTitle("\u03BB");
-//      ui.navigator = new Navigator(vertx);
-//      ui.canvas = new Canvas(ui);
-//      ui.editor = new Editor(ui);
-//
-//      fileSystem.readFile(modelPath, ar -> {
-//         if (ar.failed()) throw new RuntimeException(ar.cause());
-//         model.delegate = new JsonObject(ar.result());
-//
-//         eventBus.publish("lambda", model.delegate);
-//         ui.navigator.root.add(new nextgen.lambda.domain.core.navigator.ModelNavigatorTreeNode(ui.navigator, model));
-//
-//         parse(modelPath, fileSystem, model.delegate);
-//      });
-//
-//      fileSystem.readFile(templatePath, ar -> {
-//         if (ar.failed()) throw new RuntimeException(ar.cause());
-//         final nextgen.lambda.domain.templates.TemplateGroup templateGroup = new nextgen.lambda.domain.templates.TemplateGroup(new io.vertx.core.json.JsonObject(ar.result()));
-//         ui.navigator.root.add(new nextgen.lambda.domain.templates.navigator.TemplateGroupNavigatorTreeNode(ui.navigator, templateGroup));
-//      });
-//
-//      ui.showUI(() -> System.exit(0));
-//   }
+      final io.vertx.core.Vertx vertx = io.vertx.core.Vertx.vertx(options);
+      final FileSystem fileSystem = vertx.fileSystem();
+      final io.vertx.core.eventbus.EventBus eventBus = vertx.eventBus();
+
+      final nextgen.lambda.domain.maven.Project project = new nextgen.lambda.domain.maven.Project("Lambda", ".");
+      final String modelPath = join(separator, project.srcMainResources(), "lambda.json");
+      final String templatePath = join(separator, project.srcMainResources(), "Java.json");
+
+      final nextgen.lambda.domain.core.Model model = new nextgen.lambda.domain.core.Model(modelPath);
+      final org.stringtemplate.v4.STGroup stGroup = new org.stringtemplate.v4.STGroupFile(join(separator, project.srcMainResources(), "Java.stg"));
+      stgToJson(fileSystem, stGroup);
+
+      try {
+         javax.swing.UIManager.setLookAndFeel(new com.formdev.flatlaf.FlatDarculaLaf());
+      } catch (javax.swing.UnsupportedLookAndFeelException ignore) {
+      }
+
+      final nextgen.lambda.domain.ui.UI ui = new nextgen.lambda.domain.ui.UI();
+      ui.setTitle("\u03BB");
+      ui.navigator = new nextgen.lambda.domain.ui.Navigator(vertx);
+      ui.canvas = new nextgen.lambda.domain.ui.Canvas(ui);
+      ui.editor = new nextgen.lambda.domain.ui.Editor(ui);
+
+      fileSystem.readFile(modelPath, ar -> {
+         if (ar.failed()) throw new RuntimeException(ar.cause());
+         model.delegate = new JsonObject(ar.result());
+         parse(modelPath, fileSystem, model.delegate);
+      });
+
+      fileSystem.readFile(templatePath, ar -> {
+         if (ar.failed()) throw new RuntimeException(ar.cause());
+         final nextgen.lambda.domain.templates.TemplateGroup templateGroup = new nextgen.lambda.domain.templates.TemplateGroup(new io.vertx.core.json.JsonObject(ar.result()));
+      });
+
+      ui.showUI(() -> System.exit(0));
+   }
 
    private static void stgToJson(io.vertx.core.file.FileSystem fileSystem, org.stringtemplate.v4.STGroup stGroup) {
       final io.vertx.core.json.JsonObject tmp = new io.vertx.core.json.JsonObject();
@@ -119,91 +111,6 @@ public class Lambda {
       }
       return java.util.Optional.empty();
    }
-
-
-//   private static Handler<Message<Object>> write(FileSystem fileSystem, Project project, STGroup stGroup) {
-//      return message -> streamJsonObjects("packages", (JsonObject) message.body())
-//         .forEach(aPackage -> {
-//
-//            streamJsonObjects("entities", aPackage).map(Lambda::decorate).forEach(entity -> {
-//               writeDomainEntity(fileSystem, project, stGroup, aPackage, entity);
-//               writeDomainTreeNodes(fileSystem, project, stGroup, aPackage, entity);
-//            });
-//
-//            streamJsonObjects("enums", aPackage).map(Lambda::decorate).forEach(entity -> {
-//               writeDomainEnum(fileSystem, project, stGroup, aPackage, entity);
-//            });
-//
-//            streamJsonObjects("interfaces", aPackage).map(Lambda::decorate).forEach(entity -> {
-//               writeDomainInterface(fileSystem, project, stGroup, aPackage, entity);
-//            });
-//         });
-//   }
-
-//   private static void writeDomainEnum(io.vertx.core.file.FileSystem fileSystem, nextgen.lambda.domain.maven.Project project, org.stringtemplate.v4.STGroup stGroup, io.vertx.core.json.JsonObject aPackage, io.vertx.core.json.JsonObject model) {
-//
-//      final String packageName = aPackage.getString("name");
-//      final String enumName = model.getString("name");
-//
-//      final ST enumDeclaration = stGroup.getInstanceOf("enumDeclaration");
-//      enumDeclaration.add("name", model.getString("name"));
-//      enumDeclaration.add("scope", model.getString("scope", null));
-//      streamObjects("values", model).forEach(element -> enumDeclaration.add("values", element));
-//
-//      final org.stringtemplate.v4.ST compilationUnit = stGroup.getInstanceOf("compilationUnit");
-//      compilationUnit.add("packageName", packageName);
-//      compilationUnit.add("members", enumDeclaration);
-//
-//      fileSystem.mkdirs(join(separator, project.srcMainJava(), packageName.replaceAll("\\.", separator)), ar -> {
-//         if (ar.failed()) throw new RuntimeException(ar.cause());
-//         write(fileSystem, compilationUnit, getFile(project, packageName, enumName));
-//      });
-//   }
-
-//   private static void writeDomainInterface(io.vertx.core.file.FileSystem fileSystem, nextgen.lambda.domain.maven.Project project, org.stringtemplate.v4.STGroup stGroup, io.vertx.core.json.JsonObject aPackage, io.vertx.core.json.JsonObject model) {
-//
-//      final String packageName = aPackage.getString("name");
-//      final String enumName = model.getString("name");
-//
-//      final ST interfaceDeclaration = stGroup.getInstanceOf("interfaceDeclaration");
-//      interfaceDeclaration.add("name", model.getString("name"));
-//      interfaceDeclaration.add("scope", model.getString("scope", null));
-//      streamJsonObjects("annotations", model).forEach(child -> interfaceDeclaration.add("annotations", annotation(stGroup, child)));
-//      streamObjects("typeParameters", model).forEach(element -> interfaceDeclaration.add("typeParameters", element));
-//      streamJsonObjects("members", model).forEach(element -> {
-//         final ST interfaceMethod = stGroup.getInstanceOf("interfaceMethod");
-//         interfaceMethod.add("name", element.getString("name"));
-//         interfaceMethod.add("type", element.getString("type"));
-//         interfaceMethod.add("scope", element.getString("scope"));
-//         streamJsonObjects("annotations", element).forEach(child -> interfaceMethod.add("annotations", annotation(stGroup, child)));
-//         streamJsonObjects("parameters", element).forEach(child -> interfaceMethod.add("parameters", parameter(stGroup, child)));
-//         streamObjects("throws", element).forEach(child -> interfaceMethod.add("throws", child));
-//         interfaceDeclaration.add("members", interfaceMethod);
-//      });
-//
-//      final org.stringtemplate.v4.ST compilationUnit = stGroup.getInstanceOf("compilationUnit");
-//      compilationUnit.add("packageName", packageName);
-//      compilationUnit.add("members", interfaceDeclaration);
-//
-//      fileSystem.mkdirs(join(separator, project.srcMainJava(), packageName.replaceAll("\\.", separator)), ar -> {
-//         if (ar.failed()) throw new RuntimeException(ar.cause());
-//         write(fileSystem, compilationUnit, getFile(project, packageName, enumName));
-//      });
-//   }
-
-//   private static void writeDomainEntity(io.vertx.core.file.FileSystem fileSystem, nextgen.lambda.domain.maven.Project project, org.stringtemplate.v4.STGroup stGroup, io.vertx.core.json.JsonObject aPackage, io.vertx.core.json.JsonObject model) {
-//
-//      final String packageName = aPackage.getString("name");
-//      final String className = model.getString("name");
-//
-//      final org.stringtemplate.v4.ST compilationUnit = stGroup.getInstanceOf("compilationUnit");
-//      compilationUnit.add("packageName", packageName);
-////      compilationUnit.add("members", classDeclaration);
-//      fileSystem.mkdirs(join(separator, project.srcMainJava(), packageName.replaceAll("\\.", separator)), ar -> {
-//         if (ar.failed()) throw new RuntimeException(ar.cause());
-//         write(fileSystem, compilationUnit, getFile(project, packageName, className));
-//      });
-//   }
 
    public static java.util.Optional<org.stringtemplate.v4.ST> mapClassDeclaration(STGroup stGroup, io.vertx.core.json.JsonObject model, io.vertx.core.json.JsonObject map) {
 

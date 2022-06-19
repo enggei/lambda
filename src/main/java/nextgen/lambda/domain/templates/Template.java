@@ -17,6 +17,9 @@ public class Template {
 	}
 
 	public java.util.stream.Stream<TemplateParameter> parameters() {
-	    return delegate.getJsonArray("parameters", new io.vertx.core.json.JsonArray()).stream().map(element -> (io.vertx.core.json.JsonObject) element).map(TemplateParameter::new);
+	    return delegate.getJsonArray("parameters", new io.vertx.core.json.JsonArray())
+	             .stream()
+	             .map(element -> (io.vertx.core.json.JsonObject) element)
+	             .map(TemplateParameter::new);
 	}
 }
