@@ -16,11 +16,24 @@ package ~packageName~;
 
 importDeclaration(name, isStatic, isAsterisk) ::= <<~if(isStatic)~static ~endif~~name~~if(isAsterisk)~.*~endif~>>
 
-enumDeclaration(annotations, scope, name, values) ::= <<
+enumDeclaration(annotations, scope, name, values, fields, methods) ::= <<
 ~if(annotations)~~annotations:{it|~it~};separator="\n"~
 ~endif~
 ~if(scope)~~scope~ ~endif~enum ~name~ {
     ~values:{it|~it~};separator=",\n"~
+~if(fields)~
+    ;
+    ~fields:{it|~it~};separator="\n"~
+~if(methods)~
+
+    ~methods:{it|~it~};separator="\n\n"~
+~endif~
+~else~
+~if(methods)~
+    ;
+	~methods:{it|~it~};separator="\n\n"~
+~endif~
+~endif~
 }
 >>
 

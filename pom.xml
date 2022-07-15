@@ -16,7 +16,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <vertx.version>4.2.4</vertx.version>
+        <vertx.version>4.3.1</vertx.version>
         <neo4j.version>4.2.4</neo4j.version>
 
         <javaparser.version>3.24.0</javaparser.version>
@@ -89,7 +89,7 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-core</artifactId>
-            <version>4.2.4</version>
+            <version>${vertx.version}</version>
         </dependency>
         <dependency>
             <groupId>org.greenrobot</groupId>
@@ -127,6 +127,12 @@
             <groupId>tech.tablesaw</groupId>
             <artifactId>tablesaw-core</artifactId>
             <version>0.43.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.haifengl/smile-core -->
+        <dependency>
+            <groupId>com.github.haifengl</groupId>
+            <artifactId>smile-core</artifactId>
+            <version>2.6.0</version>
         </dependency>
         <dependency>
             <groupId>ru.lanwen.verbalregex</groupId>
