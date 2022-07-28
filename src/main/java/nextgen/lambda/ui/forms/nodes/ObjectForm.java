@@ -8,7 +8,9 @@ public class ObjectForm extends nextgen.lambda.ui.forms.Form {
       super(owner);
       this.model = model;
 
-      newLeftPrefNone().newLeftPrefNone().newLeftPrefGrow();
+      newLeftPrefNone()
+         .newLeftPrefNone()
+         .newLeftPrefGrow();
 
       nextgen.lambda.OBJECTS.objectFields(model)
          .forEach(field -> {

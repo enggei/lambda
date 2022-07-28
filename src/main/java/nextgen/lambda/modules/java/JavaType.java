@@ -79,6 +79,12 @@ public class JavaType implements Comparable<JavaType> {
       return java.util.Optional.ofNullable(aClass);
    }
 
+   public String name() {
+      final String s = canonicalName();
+      final int index = s.lastIndexOf('.');
+      return index == -1 ? s : s.substring(index + 1);
+   }
+
    public String canonicalName() {
       return canonicalName;
    }

@@ -6,13 +6,6 @@ public class ACTIONS {
 
    static final java.util.concurrent.ExecutorService EXECUTOR = java.util.concurrent.Executors.newFixedThreadPool(20);
 
-//   public static nextgen.lambda.ACTIONS.ExecutorAction newAction(String name, Runnable action) {
-//      return new nextgen.lambda.ACTIONS.ExecutorAction(name, action);
-//   }
-//
-//   public static nextgen.lambda.ACTIONS.ExecutorAction newAction(String name, String keycode, Runnable action) {
-//      return new nextgen.lambda.ACTIONS.ExecutorAction(name, keycode, action);
-//   }
 
    public static nextgen.lambda.ACTIONS.UIAction newAction(String name, Runnable action) {
       return new ACTIONS.UIAction(name, action);
@@ -47,30 +40,6 @@ public class ACTIONS {
    public static void run(Runnable runnable) {
       EXECUTOR.submit(runnable);
    }
-
-//   public static final class ExecutorAction extends javax.swing.AbstractAction {
-//
-//      final Runnable delegate;
-//
-//      public ExecutorAction(String name, Runnable delegate) {
-//         super(name);
-//         this.delegate = delegate;
-//      }
-//
-//      public ExecutorAction(String name, String keycode, Runnable delegate) {
-//         super(name);
-//         this.delegate = delegate;
-//         putValue(javax.swing.Action.ACTION_COMMAND_KEY, keycode);
-//      }
-//
-//      @Override
-//      public void actionPerformed(java.awt.event.ActionEvent actionEvent) {
-//         javax.swing.SwingUtilities.invokeLater(() -> {
-//            log.info(getValue(javax.swing.Action.NAME) + " " + delegate.toString());
-//            EVENTS.run(EXECUTOR.submit(delegate));
-//         });
-//      }
-//   }
 
    public static final class UIAction extends javax.swing.AbstractAction {
 

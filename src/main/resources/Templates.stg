@@ -1,0 +1,15 @@
+delimiters "~","~"
+
+Template(name,parameters) ::= <<~name~
+~parameters:{it|~it~};separator=""~   >>  
+
+TemplateGroup(name,templates) ::= <<~name~
+~templates:{it|~it~};separator=""~   >>  
+
+TemplateParameter(name,qty,type) ::= <<~name~
+~qty~
+~type~   >>  
+
+eom() ::= "}"
+
+gt() ::= ">" 

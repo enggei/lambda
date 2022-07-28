@@ -110,6 +110,7 @@ public class FormRow {
    public RowSpan spans(int column) {
       return this.spans.getOrDefault(column, defaultSpans);
    }
+
    public RowAlignment alignments(Integer column) {
       return this.alignments.getOrDefault(column, defaultAlignments);
    }
@@ -128,72 +129,82 @@ public class FormRow {
    }
 
    public nextgen.lambda.ui.forms.FormRow button(String name, javax.swing.Action action) {
-      final nextgen.lambda.ui.components.ButtonComponent component = addButtonComponent(name, action);
-      return add(columns.size(), component.component());
+      add(new nextgen.lambda.ui.components.ButtonComponent(name, action));
+      return this;
+   }
+
+   public nextgen.lambda.ui.forms.FormRow button(String name, javax.swing.Action action, int colSpan, int rowSpan) {
+      add(new nextgen.lambda.ui.components.ButtonComponent(name, action), colSpan, rowSpan);
+      return this;
    }
 
    public nextgen.lambda.ui.forms.FormRow comboBox(String name, java.util.Collection<?> choices) {
-      final nextgen.lambda.ui.components.ComboBoxComponent component = addComboBoxComponent(name, choices);
-      return add(columns.size(), component.component());
+      add(new nextgen.lambda.ui.components.ComboBoxComponent(name, choices));
+      return this;
+   }
+
+   public nextgen.lambda.ui.forms.FormRow checkBox(String name) {
+      add(new nextgen.lambda.ui.components.CheckBoxComponent(name, false));
+      return this;
+   }
+
+   public nextgen.lambda.ui.forms.FormRow checkBox(String name, String text) {
+      add(new nextgen.lambda.ui.components.CheckBoxComponent(name, text, false));
+      return this;
    }
 
    public nextgen.lambda.ui.forms.FormRow textField(String name) {
-      final nextgen.lambda.ui.components.StringComponent component = addStringComponent(name);
-      return add(columns.size(), component.component());
+      add(new nextgen.lambda.ui.components.StringComponent(name));
+      return this;
+   }
+
+   public nextgen.lambda.ui.forms.FormRow textField(String name, int colSpan, int rowSpan) {
+      add(new nextgen.lambda.ui.components.StringComponent(name), colSpan, rowSpan);
+      return this;
    }
 
    public nextgen.lambda.ui.forms.FormRow textField(String name, String value) {
-      final nextgen.lambda.ui.components.StringComponent component = addStringComponent(name);
-      component.value(value);
-      return add(columns.size(), component.component());
+      add(new nextgen.lambda.ui.components.StringComponent(name).value(value));
+      return this;
    }
 
    public nextgen.lambda.ui.forms.FormRow textArea(String name) {
-      final nextgen.lambda.ui.components.TextComponent component = addTextComponent(name);
-      return add(columns.size(), component.component());
+      add(new nextgen.lambda.ui.components.TextComponent(name));
+      return this;
+   }
+
+   public nextgen.lambda.ui.forms.FormRow textArea(String name, int colSpan, int rowSpan) {
+      final nextgen.lambda.ui.components.TextComponent component = new nextgen.lambda.ui.components.TextComponent(name);
+      components.put(component.name(), component);
+      addScrollable(component.component(), colSpan, rowSpan);
+      return this;
    }
 
    public nextgen.lambda.ui.forms.FormRow textArea(String name, String value) {
-      final nextgen.lambda.ui.components.TextComponent component = addTextComponent(name);
-      component.value(value);
-      return add(columns.size(), component.component());
+      add(new nextgen.lambda.ui.components.TextComponent(name).value(value));
+      return this;
    }
 
    public nextgen.lambda.ui.forms.FormRow intField(String name) {
-      final nextgen.lambda.ui.components.IntegerComponent component = addIntegerComponent(name);
-      return add(columns.size(), component.component());
+      add(new nextgen.lambda.ui.components.IntegerComponent(name));
+      return this;
    }
 
    public nextgen.lambda.ui.forms.FormRow intField(String name, int value) {
-      final nextgen.lambda.ui.components.IntegerComponent component = addIntegerComponent(name);
-      component.value(value);
-      return add(columns.size(), component.component());
+      add(new nextgen.lambda.ui.components.IntegerComponent(name).value(value));
+      return this;
    }
 
    public <C extends javax.swing.JComponent, T> nextgen.lambda.ui.components.Component<C, T> add(nextgen.lambda.ui.components.Component<C, T> component) {
-      this.components.put(component.name(), component);
+      components.put(component.name(), component);
       add(columns.size(), component.component());
       return component;
    }
 
-   private nextgen.lambda.ui.components.ComboBoxComponent addComboBoxComponent(String name, java.util.Collection<?> choices) {
-      return (nextgen.lambda.ui.components.ComboBoxComponent) add(new nextgen.lambda.ui.components.ComboBoxComponent(name, choices));
-   }
-
-   private nextgen.lambda.ui.components.ButtonComponent addButtonComponent(String name, javax.swing.Action action) {
-      return (nextgen.lambda.ui.components.ButtonComponent) add(new nextgen.lambda.ui.components.ButtonComponent(name, action));
-   }
-
-   private nextgen.lambda.ui.components.StringComponent addStringComponent(String name) {
-      return (nextgen.lambda.ui.components.StringComponent) add(new nextgen.lambda.ui.components.StringComponent(name));
-   }
-
-   private nextgen.lambda.ui.components.TextComponent addTextComponent(String name) {
-      return (nextgen.lambda.ui.components.TextComponent) add(new nextgen.lambda.ui.components.TextComponent(name));
-   }
-
-   private nextgen.lambda.ui.components.IntegerComponent addIntegerComponent(String name) {
-      return (nextgen.lambda.ui.components.IntegerComponent) add(new nextgen.lambda.ui.components.IntegerComponent(name));
+   public <C extends javax.swing.JComponent, T> nextgen.lambda.ui.components.Component<C, T> add(nextgen.lambda.ui.components.Component<C, T> component, int colSpan, int rowSpan) {
+      components.put(component.name(), component);
+      add(columns.size(), component.component(), colSpan, rowSpan, "FILL", "FILL");
+      return component;
    }
 
    public nextgen.lambda.ui.forms.FormRow button(javax.swing.Action action) {
@@ -205,6 +216,14 @@ public class FormRow {
       form.buttonGroups.putIfAbsent(buttonGroup, new javax.swing.ButtonGroup());
       form.buttonGroups.get(buttonGroup).add(button);
       return add(button, 1, 1, "FILL", "FILL");
+   }
+
+   public java.util.Optional<nextgen.lambda.ui.components.CheckBoxComponent> getCheckBox(String name) {
+      try {
+         return java.util.Optional.ofNullable((nextgen.lambda.ui.components.CheckBoxComponent) components.get(name));
+      } catch (Throwable throwable) {
+         return java.util.Optional.empty();
+      }
    }
 
    public java.util.Optional<nextgen.lambda.ui.components.ComboBoxComponent> getComboBox(String name) {

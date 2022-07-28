@@ -29,6 +29,7 @@ public class LOG {
 
       Throwable throwableCause = throwable.getCause();
       while (throwableCause != null) {
+         log.severe(throwableCause.getMessage());
          logStackTrace(log, throwableCause);
          throwableCause = throwableCause.getCause();
       }

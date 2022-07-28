@@ -11,12 +11,14 @@ public class EditorEventsHandler {
    @org.greenrobot.eventbus.Subscribe
    public void onEvent(nextgen.lambda.EVENTS.Event event) {
       switch (event.type) {
-         case EDIT -> {
-            if (event.model instanceof Class<?>)
-               editor.merge(event.model, () -> new nextgen.lambda.ui.editor.EditorTab<>(editor, event.label(), event.model, new nextgen.lambda.ui.editor.nodes.EditorClassComponent(editor, (Class<?>) event.model)));
-            else
-               editor.merge(event.model, () -> new nextgen.lambda.ui.editor.EditorTab<>(editor, event.label(), event.model, new nextgen.lambda.ui.editor.nodes.EditorObjectComponent<>(editor, event.model)));
-         }
+         case CLOSE -> editor.remove(event.model);
+         case EDIT -> editor.merge(event.model, getEditorTabSupplier(event, new nextgen.lambda.ui.editor.nodes.EditorObjectComponent<>(editor, event.model)));
+         case FUTURE -> editor.merge(event.model, getEditorTabSupplier(event, new nextgen.lambda.ui.editor.nodes.EditorFutureComponent(editor, (Throwable) event.model)));
+         case EXCEPTION -> editor.merge(event.model, getEditorTabSupplier(event, new nextgen.lambda.ui.editor.nodes.EditorExceptionComponent(editor, (Throwable) event.model)));
       }
+   }
+
+   private java.util.function.Supplier<nextgen.lambda.ui.editor.EditorTab<Object, ?>> getEditorTabSupplier(nextgen.lambda.EVENTS.Event event, javax.swing.JComponent component) {
+      return () -> new nextgen.lambda.ui.editor.EditorTab<>(editor, event.label(), event.model, component);
    }
 }

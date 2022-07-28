@@ -1,128 +1,149 @@
 package nextgen.lambda;
 
-import static java.io.File.*;
+import java.util.*;
+import java.util.function.*;
+
 import static java.lang.String.*;
 
 public class LambdaTests {
 
-   private static final String mainResources = "src/main/resources";
-   private static final String mainSrc = "src/main/java";
+   private static final java.util.logging.Logger log = nextgen.lambda.LOG.logger(LambdaTests.class);
 
-   public static void main(String[] args) throws java.io.IOException {
+   @org.junit.Test
+   public void testObjects() {
 
-      String version = args.length == 0 ? "lambda" : args[0];
+      final LambdaMatrix matrix = LambdaMatrix.init()
+         .supplier("Hello", () -> "Hello")
+         .supplier("World", () -> "World")
+         .consumer("Println", o -> System.out.println(o.toString()))
+         .function("ToUpper", o -> o.toString().toUpperCase())
+         .biFunction("Concat", (one,two) -> String.join(" ", one.toString(), two.toString()))
+         .function("ToLower", o -> o.toString().toLowerCase());
 
-      final io.vertx.core.json.JsonObject model = coreModel(version);
-      final org.stringtemplate.v4.STGroup stGroup = new org.stringtemplate.v4.STGroupFile(join(separator, mainResources, join(".", "Java", "stg")), '~', '~');
-      final io.vertx.core.json.JsonObject mapper = coreMapper();
+      matrix
+         .apply_2("Hello", "World", "Concat")
+         .ifPresent(System.out::println);
 
-      Lambda.streamJsonObjects("packages", model)
-         .forEach(packagesElement -> nextgen.lambda.Lambda.streamJsonObjects("entities", packagesElement)
-            .map(nextgen.lambda.Lambda::decorate)
-            .forEach(entitiesElement -> nextgen.lambda.Lambda.mapClassDeclaration(stGroup, entitiesElement, mapper)
-               .ifPresent(write(stGroup, packagesElement, entitiesElement))));
 
-      final io.vertx.core.json.JsonObject newModel = new io.vertx.core.json.JsonObject();
-      newModel.put("packages", new io.vertx.core.json.JsonArray());
-
-      nextgen.lambda.Lambda.files(mainSrc, "java")
-        // .filter(file -> file.toString().contains("/domain/"))
-         .peek(file -> System.out.println("parse " + file))
-         .filter(parse(newModel))
-         .findFirst()
-         .ifPresentOrElse(path -> {
-               try {
-                  System.err.println(path + " has errors \n" + java.nio.file.Files.readString(path));
-               } catch (java.io.IOException e) {
-                  throw new RuntimeException(e);
-               }
-            },
-            () -> {
-
-               try {
-                  final String newModelName = "lambda_new";
-                  final java.nio.file.Path newModelFile = java.nio.file.Path.of(join(separator, mainResources, join(".", newModelName, "json")));
-
-                  java.nio.file.Files.createDirectories(newModelFile.getParent());
-                  java.nio.file.Files.writeString(newModelFile, newModel.encodePrettily());
-                  System.out.println("w " + newModelFile);
-
-//                  LambdaTests.main(new String[]{
-//                     newModelName
-//                  });
-
-               } catch (java.io.IOException e) {
-                  throw new RuntimeException(e);
-               }
-            });
    }
 
-   private static java.util.function.Predicate<java.nio.file.Path> parse(io.vertx.core.json.JsonObject model) {
-      return path -> {
-         try {
+   private static class LambdaMatrix {
 
-            String packageName = path.toString().substring(mainSrc.length() + 1, path.toString().lastIndexOf(separator)).replaceAll(separator, ".").trim();
+      public static LambdaMatrix init() {
+         return new LambdaMatrix();
+      }
 
-            final io.vertx.core.json.JsonObject aPackage = nextgen.lambda.Lambda.streamJsonObjects("packages", model)
-               .filter(element -> element.getString("name").equals(packageName))
-               .findFirst()
-               .orElseGet(() -> {
-                  System.out.println("package " + packageName);
-                  final io.vertx.core.json.JsonObject newPackage = new io.vertx.core.json.JsonObject();
-                  newPackage.put("name", packageName);
-                  newPackage.put("entities", new io.vertx.core.json.JsonArray());
-                  newPackage.put("interfaces", new io.vertx.core.json.JsonArray());
-                  newPackage.put("enums", new io.vertx.core.json.JsonArray());
-                  model.getJsonArray("packages").add(newPackage);
-                  return newPackage;
-               });
+      protected final Map<String, Supplier<Object>> supplierMap = new TreeMap<>();
+      protected final Map<String, Consumer<Object>> consumerMap = new TreeMap<>();
 
-            com.github.javaparser.StaticJavaParser.parse(path).getTypes()
-               .forEach(typeDeclaration -> {
+      protected final Map<String, Function<Object, Object>> functionMap = new TreeMap<>();
+      protected final Map<String, BiFunction<Object, Object, Object>> biFunctionMap = new TreeMap<>();
 
-                  typeDeclaration.ifClassOrInterfaceDeclaration(classOrInterfaceDeclaration -> {
-                     if (classOrInterfaceDeclaration.isInterface())
-                        aPackage.getJsonArray("interfaces").add(Lambda.mapClassDeclaration(classOrInterfaceDeclaration));
-                     else
-                        aPackage.getJsonArray("entities").add(Lambda.mapClassDeclaration(classOrInterfaceDeclaration));
-                  });
+      Optional<Supplier<Object>> supplier(String name) {
+         return Optional.ofNullable(supplierMap.get(name));
+      }
 
-                  typeDeclaration.ifEnumDeclaration(enumDeclaration -> aPackage.getJsonArray("enums").add(Lambda.mapEnumDeclaration(enumDeclaration)));
-               });
+      Optional<Consumer<Object>> consumer(String name) {
+         return Optional.ofNullable(consumerMap.get(name));
+      }
 
-            return false;
-         } catch (java.io.IOException e) {
-            return true;
-         }
-      };
+      Optional<Function<Object, Object>> function(String name) {
+         return Optional.ofNullable(functionMap.get(name));
+      }
+
+      Optional<BiFunction<Object, Object, Object>> biFunction(String name) {
+         return Optional.ofNullable(biFunctionMap.get(name));
+      }
+
+      LambdaMatrix supplier(String name, Supplier<Object> supplier) {
+         this.supplierMap.put(name, supplier);
+         return this;
+      }
+
+      LambdaMatrix consumer(String name, Consumer<Object> consumer) {
+         this.consumerMap.put(name, consumer);
+         return this;
+      }
+
+      LambdaMatrix function(String name, Function<Object, Object> function) {
+         this.functionMap.put(name, function);
+         return this;
+      }
+
+      LambdaMatrix biFunction(String name, BiFunction<Object, Object, Object> function) {
+         this.biFunctionMap.put(name, function);
+         return this;
+      }
+
+      public Optional<Object> apply(String supplier, String function) {
+         final Optional<Supplier<Object>> optionalSupplier = supplier(supplier);
+         final Optional<Function<Object, Object>> optionalFunction = function(function);
+         if (optionalSupplier.isPresent() && optionalFunction.isPresent())
+            return Optional.ofNullable(optionalFunction.get().apply(optionalSupplier.get().get()));
+         return Optional.empty();
+      }
+
+      public Optional<Object> apply_2(String supplier, String supplier2, String biFunction) {
+         final Optional<Supplier<Object>> optionalSupplier = supplier(supplier);
+         final Optional<Supplier<Object>> optionalSupplier2 = supplier(supplier2);
+         final Optional<BiFunction<Object, Object, Object>> optionalFunction = biFunction(biFunction);
+         if (optionalSupplier.isPresent() && optionalSupplier2.isPresent() && optionalFunction.isPresent())
+            return Optional.ofNullable(optionalFunction.get().apply(optionalSupplier.get().get(), optionalSupplier2.get().get()));
+         return Optional.empty();
+      }
    }
 
-   private static java.util.function.Consumer<org.stringtemplate.v4.ST> write(org.stringtemplate.v4.STGroup stGroup, io.vertx.core.json.JsonObject packagesElement, io.vertx.core.json.JsonObject model) {
-      return st -> {
-         try {
-            final String packageName = packagesElement.getString("name");
-            final String packagePath = join(separator, mainSrc, packagesElement.getString("name").replaceAll("\\.", separator));
-            final String className = model.getString("name");
-            final String javaFile = join(separator, packagePath, join(".", className, "java"));
+   private void log(Class<?> aClass) {
+      log.info("class         " + aClass);
 
-            final org.stringtemplate.v4.ST compilationUnit = stGroup.getInstanceOf("compilationUnit");
-            compilationUnit.add("packageName", packageName);
-            compilationUnit.add("members", st);
+      log.info("constructors  ");
+      java.util.Arrays.stream(aClass.getDeclaredConstructors())
+         .map(this::log)
+         .sorted()
+         .forEach(log::info);
 
-            java.nio.file.Files.createDirectories(java.nio.file.Path.of(packagePath));
-            java.nio.file.Files.writeString(java.nio.file.Path.of(javaFile), compilationUnit.render());
-            System.out.println("w " + javaFile);
-         } catch (java.io.IOException e) {
-            throw new RuntimeException(e);
-         }
-      };
+      log.info("class fields  ");
+      java.util.Arrays.stream(aClass.getDeclaredFields())
+         .map(this::log)
+         .sorted()
+         .forEach(log::info);
+
+      log.info("class methods  ");
+      java.util.Arrays.stream(aClass.getDeclaredMethods())
+         .map(this::log)
+         .sorted()
+         .forEach(log::info);
    }
 
-   private static io.vertx.core.json.JsonObject coreModel(String version) throws java.io.IOException {
-      return new io.vertx.core.json.JsonObject(java.nio.file.Files.readString(java.nio.file.Path.of(join(separator, mainResources, join(".", version, "json")))));
+   private String log(java.lang.reflect.Constructor<?> model) {
+      return join(",",
+         "C",
+         java.lang.reflect.Modifier.toString(model.getModifiers()),
+         join(",",
+            Integer.toString(model.getParameterCount()),
+            java.util.Arrays.stream(model.getParameterTypes()).map(Class::getSimpleName).sorted().collect(java.util.stream.Collectors.joining(" "))));
    }
 
-   private static io.vertx.core.json.JsonObject coreMapper() throws java.io.IOException {
-      return new io.vertx.core.json.JsonObject(java.nio.file.Files.readString(java.nio.file.Path.of(join(separator, mainResources, "core_mapper.json"))));
+   private String log(java.lang.reflect.Field model) {
+      return join(",",
+         "F",
+         java.lang.reflect.Modifier.toString(model.getModifiers()),
+         model.getType().getSimpleName(),
+         model.getName()
+      );
    }
+
+   private String log(java.lang.reflect.Method model) {
+      return join(",",
+         "M",
+         java.lang.reflect.Modifier.toString(model.getModifiers()),
+         model.getReturnType().getSimpleName(),
+         model.getName(),
+         Integer.toString(model.getParameterCount()),
+         java.util.Arrays.stream(model.getParameterTypes())
+            .map(Class::getSimpleName)
+            .sorted()
+            .collect(java.util.stream.Collectors.joining(" ")));
+   }
+
 }

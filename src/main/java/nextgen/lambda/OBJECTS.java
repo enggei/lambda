@@ -291,11 +291,20 @@ public class OBJECTS {
    }
 
    static Comparator<Method> methodComparator() {
-      return Comparator.comparing(Method::getName).thenComparing(m -> m.getReturnType().getCanonicalName()).thenComparing(Method::getParameterCount).thenComparing((m1, m2) -> {
-         final String t1 = Arrays.stream(m1.getParameterTypes()).map(Class::getCanonicalName).collect(joining());
-         final String t2 = Arrays.stream(m2.getParameterTypes()).map(Class::getCanonicalName).collect(joining());
-         return t1.compareTo(t2);
-      });
+      return (m1, m2) -> {
+
+         final int p1 = m1.getParameterCount();
+         final int p2 = m2.getParameterCount();
+         int compare = p1 - p2;
+         if (compare != 0) return compare;
+
+         final String r1 = m1.getReturnType().getCanonicalName();
+         final String r2 = m2.getReturnType().getCanonicalName();
+         compare = r1.compareTo(r2);
+         if (compare != 0) return compare;
+
+         return m1.getName().compareTo(m2.getName());
+      };
    }
 
    static Comparator<Field> fieldComparator() {
@@ -345,7 +354,10 @@ public class OBJECTS {
    public static java.util.stream.Stream<java.lang.reflect.Method> classMethods(Object object) {
       return java.util.Arrays.stream(classFor(object)
             .getDeclaredMethods())
-         .filter(method -> !java.lang.reflect.Modifier.isAbstract(method.getModifiers())).filter(method -> java.lang.reflect.Modifier.isPublic(method.getModifiers())).filter(method -> java.lang.reflect.Modifier.isStatic(method.getModifiers())).sorted(methodComparator());
+         .filter(method -> !java.lang.reflect.Modifier.isAbstract(method.getModifiers()))
+         .filter(method -> java.lang.reflect.Modifier.isPublic(method.getModifiers()))
+         .filter(method -> java.lang.reflect.Modifier.isStatic(method.getModifiers()))
+         .sorted(methodComparator());
    }
 
    public static void invokeClassMethod(javax.swing.JComponent owner, java.lang.reflect.Method method, java.util.Collection<Object> objects) {

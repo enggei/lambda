@@ -4,7 +4,7 @@ import static nextgen.lambda.IO.*;
 
 public class Java extends nextgen.lambda.modules.AbstractLambdaModule {
 
-   private static final java.util.logging.Logger log = nextgen.lambda.LOG.logger(Java.class);
+
    private static final org.stringtemplate.v4.STGroup JAVAGROUP = nextgen.lambda.modules.templates.Templates.toSTGroup(java.nio.file.Path.of(mainResources.toString(), "Java.stg"));
 
    @Override
@@ -17,6 +17,7 @@ public class Java extends nextgen.lambda.modules.AbstractLambdaModule {
       addClassTreeNode(treeNode, nextgen.lambda.modules.java.JavaParser.class);
       addClassTreeNode(treeNode, nextgen.lambda.modules.java.JavaCompiler.class);
       addClassTreeNode(treeNode, nextgen.lambda.modules.java.JavaTypes.class);
+      addClassTreeNode(treeNode, nextgen.lambda.modules.java.JavaMainSrc.class);
 
       addPackageTreeNodeTreeNode(treeNode, "lang", nextgen.lambda.modules.java.JavaTypes.get().lang().classes());
       addPackageTreeNodeTreeNode(treeNode, "stream", nextgen.lambda.modules.java.JavaTypes.get().stream().classes());

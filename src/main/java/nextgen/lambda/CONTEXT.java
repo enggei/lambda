@@ -2,8 +2,6 @@ package nextgen.lambda;
 
 public class CONTEXT {
 
-   private static final java.util.logging.Logger log = nextgen.lambda.LOG.logger(CONTEXT.class);
-
    private final java.util.Set<nextgen.lambda.modules.LambdaModule> modules = new java.util.TreeSet<>();
    private final org.neo4j.graphdb.GraphDatabaseService db;
 

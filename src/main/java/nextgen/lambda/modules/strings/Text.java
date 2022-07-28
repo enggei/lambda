@@ -1,4 +1,4 @@
-package nextgen.lambda.types;
+package nextgen.lambda.modules.strings;
 
 public class Text {
 
@@ -20,7 +20,7 @@ public class Text {
 
    public TextTokens tokenize() {
 
-      final TextTokens textTokens = new nextgen.lambda.types.Text.TextTokens();
+      final TextTokens textTokens = new Text.TextTokens();
 
       final java.util.concurrent.atomic.AtomicInteger index = new java.util.concurrent.atomic.AtomicInteger(-1);
       final java.util.concurrent.atomic.AtomicInteger lineNo = new java.util.concurrent.atomic.AtomicInteger(-1);
@@ -42,11 +42,11 @@ public class Text {
 
    public static final class TextTokens {
 
-      private final java.util.Map<String, java.util.Set<nextgen.lambda.types.Text.TokenPosition>> tokens = new java.util.TreeMap<>();
+      private final java.util.Map<String, java.util.Set<Text.TokenPosition>> tokens = new java.util.TreeMap<>();
 
       public void token(String token, int index, int line, int column) {
          if (!tokens.containsKey(token)) tokens.put(token, new java.util.TreeSet<>());
-         tokens.get(token).add(new nextgen.lambda.types.Text.TokenPosition(index, line, column));
+         tokens.get(token).add(new Text.TokenPosition(index, line, column));
       }
 
       @Override
@@ -75,7 +75,7 @@ public class Text {
       }
 
       @Override
-      public int compareTo(nextgen.lambda.types.Text.TokenPosition tokenPosition) {
+      public int compareTo(Text.TokenPosition tokenPosition) {
          return index - tokenPosition.index;
       }
    }

@@ -1,5 +1,7 @@
 package nextgen.lambda.ui.components;
 
+import java.time.*;
+
 public interface Component<C extends javax.swing.JComponent, T> {
 
    String name();
@@ -33,6 +35,8 @@ public interface Component<C extends javax.swing.JComponent, T> {
          return java.util.Optional.of((Component<?, T>) new nextgen.lambda.ui.components.CharacterComponent(name));
       } else if ("bool".equals(simpleName)) {
          return java.util.Optional.of((Component<?, T>) new nextgen.lambda.ui.components.BooleanComponent(name));
+      } else if (LocalDate.class.equals(aClass)) {
+         return java.util.Optional.of((Component<?, T>) new DateComponent(name));
       }
       return java.util.Optional.empty();
    }

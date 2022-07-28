@@ -4,6 +4,7 @@ public class TextComponent extends AbstractComponent<javax.swing.JTextArea, Stri
 
    public TextComponent(String name) {
       super(name, new javax.swing.JTextArea(10, 30));
+      component().setFont(new java.awt.Font(java.awt.Font.MONOSPACED, java.awt.Font.PLAIN, 12));
    }
 
    @Override

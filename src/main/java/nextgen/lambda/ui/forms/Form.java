@@ -137,6 +137,13 @@ public class Form {
       return newRow().center().pref().none();
    }
 
+   public nextgen.lambda.ui.forms.FormRow newTopPrefNone() {
+      return newRow().top().pref().none();
+   }
+   public nextgen.lambda.ui.forms.FormRow newTopPrefGrow() {
+      return newRow().top().pref().grow();
+   }
+
    private String rowSpec() {
       final StringBuilder spec = new StringBuilder();
       for (int i = 0; i < rows.size(); i++) spec.append(i > 0 ? ", " : "").append(rows.get(i).spec());

@@ -60,12 +60,9 @@ public class JavaCompiler {
          classDeclarationBuilder.set_name(className);
          return java.util.Optional.of(aClass);
       } catch (Throwable throwable) {
-         classDeclarationBuilder.set_name(className);
          log.severe(errors.toString());
-         nextgen.lambda.EVENTS.open(errors);
-         nextgen.lambda.EVENTS.open(classDeclarationBuilder);
-         nextgen.lambda.EVENTS.open(compileCode);
-         nextgen.lambda.EVENTS.exception(throwable);
+         log.severe(compileCode);
+         nextgen.lambda.EVENTS.open(new JavaCompileException(compileCode, errors.toString()));
          return java.util.Optional.empty();
       }
    }

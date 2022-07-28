@@ -32,6 +32,10 @@ public class Editor extends javax.swing.JTabbedPane {
       remove(scrollers.remove(editorTab.component));
    }
 
+   public void remove(Object model) {
+      java.util.Optional.ofNullable(editors.remove(model)).ifPresent(editorTab -> remove(scrollers.remove(editorTab.component)));
+   }
+
    public void setSelected(nextgen.lambda.ui.editor.EditorTab<?, ?> editorTab) {
       setSelectedComponent(scrollers.get(editorTab.component));
    }

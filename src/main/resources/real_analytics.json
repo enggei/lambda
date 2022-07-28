@@ -5,11 +5,648 @@
       "entities": [
         {
           "name": "Person",
-          "fields": [
-            {"name": "name", "type": "String"},
-            {"name": "role", "type": "String"}
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            }
           ],
-          "methods": [
+          "relations": [
+            {
+              "name": "roles",
+              "cardinality": "MANY",
+              "type": "Role"
+            },
+            {
+              "name": "callQueues",
+              "cardinality": "MANY",
+              "type": "CallQueue"
+            }
+          ]
+        },
+        {
+          "name": "ImportDate",
+          "properties": [
+            {
+              "name": "date",
+              "type": "java.time.LocalDate"
+            }
+          ]
+        },
+        {
+          "name": "Coordinate",
+          "properties": [
+            {
+              "name": "coordinate",
+              "type": "org.neo4j.values.storable.PointValue"
+            }
+          ]
+        },
+        {
+          "name": "Company",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ],
+          "relations": [
+            {
+              "name": "domains",
+              "cardinality": "MANY",
+              "type": "WebDomain"
+            }
+          ]
+        },
+        {
+          "name": "Role",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "name": "Agent",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            },
+            {
+              "name": "commercial",
+              "type": "Boolean"
+            },
+            {
+              "name": "self",
+              "type": "Boolean"
+            },
+            {
+              "name": "color",
+              "type": "String"
+            }
+          ],
+          "relations": [
+            {
+              "name": "branches",
+              "cardinality": "MANY",
+              "type": "Branch"
+            },
+            {
+              "name": "domains",
+              "cardinality": "MANY",
+              "type": "WebDomain"
+            }
+          ]
+        },
+        {
+          "name": "WebDomain",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ],
+          "relations": [
+            {
+              "name": "subdomains",
+              "cardinality": "MANY",
+              "type": "WebDomain"
+            }
+          ]
+        },
+        {
+          "name": "Keyword",
+          "properties": [
+            {
+              "name": "term",
+              "type": "String"
+            }
+          ],
+          "relations": [
+            {
+              "name": "town",
+              "cardinality": "ONE",
+              "type": "Town"
+            }
+          ]
+        },
+        {
+          "name": "GoogleSearch",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            },
+            {
+              "name": "date",
+              "type": "java.time.LocalDate"
+            }
+          ],
+          "relations": [
+            {
+              "name": "keyword",
+              "cardinality": "ONE",
+              "type": "Keyword"
+            },
+            {
+              "name": "results",
+              "cardinality": "MANY",
+              "type": "GoogleSearchResult"
+            }
+          ]
+        },
+        {
+          "name": "GoogleSearchResult",
+          "properties": [
+            {
+              "name": "gmb",
+              "type": "Integer"
+            },
+            {
+              "name": "ads",
+              "type": "Integer"
+            },
+            {
+              "name": "generic",
+              "type": "Integer"
+            }
+          ],
+          "relations": [
+            {
+              "name": "domain",
+              "cardinality": "ONE",
+              "type": "WebDomain"
+            }
+          ]
+        },
+        {
+          "name": "Branch",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            },
+            {
+              "name": "self",
+              "type": "Boolean"
+            },
+            {
+              "name": "commercial",
+              "type": "Boolean"
+            },
+            {
+              "name": "color",
+              "type": "String"
+            },
+            {
+              "name": "address",
+              "type": "String"
+            },
+            {
+              "name": "rm",
+              "type": "Long"
+            }
+          ],
+          "relations": [
+            {
+              "name": "listings",
+              "cardinality": "MANY",
+              "type": "ListingDate"
+            },
+            {
+              "name": "calls",
+              "cardinality": "MANY",
+              "type": "CallDate"
+            },
+            {
+              "name": "seo",
+              "cardinality": "MANY",
+              "type": "SeoDate"
+            },
+            {
+              "name": "googleRankings",
+              "cardinality": "MANY",
+              "type": "GoogleDate"
+            },
+            {
+              "name": "domains",
+              "cardinality": "MANY",
+              "type": "WebDomain"
+            },
+            {
+              "name": "people",
+              "cardinality": "MANY",
+              "type": "Person"
+            },
+            {
+              "name": "callQueues",
+              "cardinality": "MANY",
+              "type": "CallQueue"
+            },
+            {
+              "name": "postcode",
+              "cardinality": "ONE",
+              "type": "PostcodeUnit"
+            },
+            {
+              "name": "town",
+              "cardinality": "ONE",
+              "type": "Town"
+            }
+          ]
+        },
+        {
+          "name": "GoogleDate",
+          "properties": [
+            {
+              "name": "date",
+              "type": "java.time.LocalDate"
+            }
+          ],
+          "relations": [
+            {
+              "name": "seo",
+              "cardinality": "MANY",
+              "type": "GoogleSearch"
+            }
+          ]
+        },
+        {
+          "name": "SeoDate",
+          "properties": [
+            {
+              "name": "date",
+              "type": "java.time.LocalDate"
+            }
+          ],
+          "relations": [
+            {
+              "name": "seo",
+              "cardinality": "MANY",
+              "type": "Seo"
+            }
+          ]
+        },
+        {
+          "name": "Seo",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            },
+            {
+              "name": "source",
+              "type": "String"
+            },
+            {
+              "name": "traffic",
+              "type": "Integer"
+            },
+            {
+              "name": "position",
+              "type": "Integer"
+            },
+            {
+              "name": "botDate",
+              "type": "java.time.LocalDateTime"
+            },
+            {
+              "name": "volume",
+              "type": "Long"
+            },
+            {
+              "name": "kd",
+              "type": "Integer"
+            },
+            {
+              "name": "cpc",
+              "type": "Double"
+            },
+            {
+              "name": "update",
+              "type": "String"
+            }
+          ],
+          "relations": [
+            {
+              "name": "domain",
+              "cardinality": "ONE",
+              "type": "WebDomain"
+            },
+            {
+              "name": "keyword",
+              "cardinality": "ONE",
+              "type": "Keyword"
+            }
+          ]
+        },
+        {
+          "name": "CallDate",
+          "properties": [
+            {
+              "name": "date",
+              "type": "java.time.LocalDate"
+            }
+          ],
+          "relations": [
+            {
+              "name": "inbound",
+              "cardinality": "MANY",
+              "type": "InboundCallDateQueue"
+            },
+            {
+              "name": "outbound",
+              "cardinality": "MANY",
+              "type": "OutboundCallDateQueue"
+            }
+          ]
+        },
+        {
+          "name": "InboundCallDateQueue",
+          "properties": [
+            {"name":"queueId","type":"Long"},
+            {"name": "callsTotal", "type":"Integer"},
+            {"name": "callsAbandoned", "type":"Integer"},
+            {"name": "callsAnswered", "type":"Integer"},
+            {"name": "callsServiced", "type":"Double"},
+            {"name": "ringTimeTotalSeconds", "type":"Integer"},
+            {"name": "ringTimeMeanSeconds", "type":"Integer"},
+            {"name": "talkTimeTotalSeconds", "type":"Integer"},
+            {"name": "talkTimeMeanSeconds", "type":"Integer"},
+            {"name": "successfulCallbacks", "type":"Integer"}
+          ],
+          "relations": [
+            {
+              "name": "queue",
+              "cardinality": "ONE",
+              "type": "CallQueue"
+            }
+          ]
+        },
+        {
+          "name": "OutboundCallDateQueue",
+          "properties": [
+            {"name":"queueId","type":"Long"},
+            {"name":"inboundAnswered","type":"Integer"},
+            {"name":"inboundUnanswered","type":"Integer"},
+            {"name":"outboundAnswered","type":"Integer"},
+            {"name":"outboundUnanswered","type":"Integer"},
+            {"name":"totalAnswered","type":"Integer"},
+            {"name":"totalUnAnswered","type":"Integer"},
+            {"name":"totalTalkingTime","type":"Integer"}
+          ],
+          "relations": [
+            {
+              "name": "queue",
+              "cardinality": "ONE",
+              "type": "CallQueue"
+            }
+          ]
+        },
+        {
+          "name": "CallQueue",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            },
+            {
+              "name": "type",
+              "type": "String"
+            },
+            {
+              "name": "id",
+              "type": "Long"
+            }
+          ]
+        },
+        {
+          "name": "ListingDate",
+          "properties": [
+            {
+              "name": "date",
+              "type": "java.time.LocalDate"
+            }
+          ],
+          "relations": [
+            {
+              "name": "listings",
+              "cardinality": "MANY",
+              "type": "Listing"
+            }
+          ]
+        },
+        {
+          "name": "Listing",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            },
+            {
+              "name": "rm",
+              "type": "Long"
+            },
+            {
+              "name": "update",
+              "type": "String"
+            },
+            {
+              "name": "stc",
+              "type": "String"
+            },
+            {
+              "name": "premium",
+              "type": "Boolean"
+            },
+            {
+              "name": "featured",
+              "type": "Boolean"
+            },
+            {
+              "name": "price",
+              "type": "Integer"
+            },
+            {
+              "name": "priceQualifier",
+              "type": "String"
+            },
+            {
+              "name": "isRecent",
+              "type": "Boolean"
+            },
+            {
+              "name": "description",
+              "type": "String"
+            },
+            {
+              "name": "summary",
+              "type": "String"
+            },
+            {
+              "name": "type",
+              "type": "String"
+            },
+            {
+              "name": "channel",
+              "type": "String"
+            },
+            {
+              "name": "firstVisibleDate",
+              "type": "java.time.LocalDate"
+            }
+          ],
+          "relations": [
+            {
+              "name": "property",
+              "cardinality": "ONE",
+              "type": "Property"
+            }
+          ]
+        },
+        {
+          "name": "Property",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            },
+            {
+              "name": "address",
+              "type": "String"
+            },
+            {
+              "name": "bedrooms",
+              "type": "Integer"
+            },
+            {
+              "name": "bathrooms",
+              "type": "Integer"
+            }
+          ],
+          "relations": [
+            {
+              "name": "coordinate",
+              "cardinality": "ONE",
+              "type": "Coordinate"
+            },
+            {
+              "name": "type",
+              "cardinality": "ONE",
+              "type": "PropertyType"
+            }
+          ]
+        },
+        {
+          "name": "PropertyType",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ]
+        },
+        {
+          "name": "Town",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ],
+          "relations": [
+            {
+              "name": "units",
+              "cardinality": "MANY",
+              "type": "PostcodeUnit"
+            }
+          ]
+        },
+        {
+          "name": "County",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ],
+          "relations": [
+            {
+              "name": "towns",
+              "cardinality": "MANY",
+              "type": "Town"
+            }
+          ]
+        },
+        {
+          "name": "PostcodeUnit",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ],
+          "relations": [
+            {
+              "name": "coordinates",
+              "cardinality": "MANY",
+              "type": "Coordinate"
+            },
+            {
+              "name": "centroid",
+              "cardinality": "ONE",
+              "type": "Coordinate"
+            }
+          ]
+        },
+        {
+          "name": "PostcodeSector",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ],
+          "relations": [
+            {
+              "name": "units",
+              "cardinality": "MANY",
+              "type": "PostcodeUnit"
+            }
+          ]
+        },
+        {
+          "name": "PostcodeDistrict",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ],
+          "relations": [
+            {
+              "name": "sectors",
+              "cardinality": "MANY",
+              "type": "PostcodeSector"
+            }
+          ]
+        },
+        {
+          "name": "PostcodeArea",
+          "properties": [
+            {
+              "name": "name",
+              "type": "String"
+            }
+          ],
+          "relations": [
+            {
+              "name": "districts",
+              "cardinality": "MANY",
+              "type": "PostcodeDistrict"
+            }
           ]
         }
       ]

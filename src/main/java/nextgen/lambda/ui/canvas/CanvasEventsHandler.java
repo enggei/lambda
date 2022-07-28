@@ -17,7 +17,7 @@ public class CanvasEventsHandler<T extends nextgen.lambda.ui.canvas.nodes.Canvas
             else
                canvas.mergeAndCenter(event.model, () -> new nextgen.lambda.ui.canvas.nodes.CanvasObjectElement<>(canvas, event.model, event.label()));
          }
-         case EXCEPTION -> canvas.mergeAndCenter(event.model, () -> new nextgen.lambda.ui.canvas.nodes.CanvasThrowableElement(canvas, (Throwable) event.model));
+         case EXCEPTION -> canvas.mergeAndCenter(event.model, () -> new nextgen.lambda.ui.canvas.nodes.CanvasExceptionNode(canvas, (Throwable) event.model));
          case FUTURE -> canvas.merge(event.model, () -> new nextgen.lambda.ui.canvas.nodes.CanvasFutureElement(canvas, (java.util.concurrent.Future<?>) event.model));
          case CLOSE -> canvas.closeModels(java.util.Collections.singleton(event.model));
       }

@@ -31,25 +31,29 @@ public abstract class AbstractLambdaModule implements nextgen.lambda.modules.Lam
 
    @Override
    public java.util.Optional<javax.swing.JComponent> editor(Object model) {
+      return defaultEditor();
+   }
 
+   protected java.util.Optional<javax.swing.JComponent> defaultEditor() {
       final nextgen.lambda.ui.forms.Form form = nextgen.lambda.ui.forms.Form.newForm()
          .newLeftPrefNone().newLeftPrefNone().newLeftPrefGrow();
 
-      getClassMethodsFor(model)
-         .forEach(method -> form.newRow().center().pref().none()
-            .label(method.getReturnType().getSimpleName())
-            .button(nextgen.lambda.ACTIONS.newAction(method.getName(), () -> nextgen.lambda.OBJECTS.invokeClassMethod(ui.editor, method, java.util.Collections.singleton(model))))
-            .label(java.util.Arrays.stream(method.getParameterTypes()).map(Class::getSimpleName).collect(java.util.stream.Collectors.joining(" "))));
-
-      getObjectMethodsFor(model)
-         .forEach(method -> form.newRow().center().pref().none()
-            .label(method.getReturnType().getSimpleName())
-            .button(nextgen.lambda.ACTIONS.newAction(method.getName(), () -> nextgen.lambda.OBJECTS.invokeObjectMethod(ui.editor, this, method, java.util.Collections.singleton(model))))
-            .label(java.util.Arrays.stream(method.getParameterTypes()).map(Class::getSimpleName).collect(java.util.stream.Collectors.joining(" "))));
+//      getClassMethodsFor(model)
+//         .forEach(method -> form.newRow().center().pref().none()
+//            .label(method.getReturnType().getSimpleName())
+//            .button(nextgen.lambda.ACTIONS.newAction(method.getName(), () -> nextgen.lambda.OBJECTS.invokeClassMethod(ui.editor, method, java.util.Collections.singleton(model))))
+//            .label(java.util.Arrays.stream(method.getParameterTypes()).map(Class::getSimpleName).collect(java.util.stream.Collectors.joining(" "))));
+//
+//      getObjectMethodsFor(model)
+//         .forEach(method -> form.newRow().center().pref().none()
+//            .label(method.getReturnType().getSimpleName())
+//            .button(nextgen.lambda.ACTIONS.newAction(method.getName(), () -> nextgen.lambda.OBJECTS.invokeObjectMethod(ui.editor, this, method, java.util.Collections.singleton(model))))
+//            .label(java.util.Arrays.stream(method.getParameterTypes()).map(Class::getSimpleName).collect(java.util.stream.Collectors.joining(" "))));
 
       final java.util.Set<Class<?>> allTypes = ui.canvas.allTypes();
 
       nextgen.lambda.OBJECTS.objectMethods(this)
+         .filter(method -> !(method.getName().equals("editor") && method.getParameterCount()==1))
          .filter(method -> method.getParameterCount() != 0)
          .filter(method -> nextgen.lambda.OBJECTS.isCompatible(method, allTypes))
          .forEach(method -> form.newRow().center().pref().none()

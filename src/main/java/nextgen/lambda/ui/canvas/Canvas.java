@@ -1,5 +1,7 @@
 package nextgen.lambda.ui.canvas;
 
+import nextgen.lambda.modules.strings.*;
+
 import static javax.swing.SwingUtilities.*;
 
 public class Canvas extends org.piccolo2d.PCanvas {
@@ -53,7 +55,7 @@ public class Canvas extends org.piccolo2d.PCanvas {
    public java.util.Collection<javax.swing.Action> actions() {
       final java.util.ArrayList<javax.swing.Action> actions = new java.util.ArrayList<>();
 
-      actions.add(nextgen.lambda.ACTIONS.newAction("From Clipboard", "control V", () -> nextgen.lambda.ui.UI.fromClipboard().ifPresent(clipboard -> nextgen.lambda.EVENTS.open(new nextgen.lambda.types.Text(clipboard)))));
+      actions.add(nextgen.lambda.ACTIONS.newAction("From Clipboard", "control V", () -> nextgen.lambda.ui.UI.fromClipboard().ifPresent(clipboard -> nextgen.lambda.EVENTS.open(new Text(clipboard)))));
 
       actions.add(nextgen.lambda.ACTIONS.newAction("Selected to Stream", () -> nextgen.lambda.EVENTS.open(selectedModels())));
       actions.add(nextgen.lambda.ACTIONS.newAction("Selected to Set", () -> nextgen.lambda.EVENTS.open(selectedModels().collect(java.util.stream.Collectors.toSet()))));

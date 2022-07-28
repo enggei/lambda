@@ -57,4 +57,8 @@ public class FormColumn {
       return this.builder.newRow();
    }
 
+   public FormColumn dlu(int dlu) {
+      this.size = dlu + "dlu";
+      return this;
+   }
 }
